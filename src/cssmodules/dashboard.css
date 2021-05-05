@@ -161,11 +161,11 @@ p {
     display:flex;
 }
 .column-1 {
-  flex-basis: 10%; /* sets initial width to 70% */
+  flex-basis: 10%; 
   background-color:#3e71f0;
 }
 .column-2 {
-  flex-basis: 90%; /* sets initial width to 70% */
+  flex-basis: 90%; 
   }
 }
 
