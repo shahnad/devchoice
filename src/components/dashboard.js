@@ -61,7 +61,8 @@ const Dashboard = () => {
                     <div className="levelmain">
                         <h3>Recent Nominations</h3>
                         {
-                            !nominationList.length && (<div className="nonominationdata">There are no nominations to display !</div>)}
+                            !nominationList.length && (<div className="nonominationdata">Sorry, no nominations to display !</div>)
+                        }
 
                         <div className="grid-container">
                             {
@@ -98,6 +99,9 @@ const Dashboard = () => {
                             </div>
                             <div className="space_1 tile">
                                 <h3>Nominations Count</h3>
+                                {
+                                    !nominationCount.length && (<div className="nonominationdata">No nominations count to display !</div>)
+                                }
                                 {
                                     nominationCount.map(data => (
                                         <div key={data.id}>
