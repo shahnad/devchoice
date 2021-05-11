@@ -15,11 +15,49 @@
 .inputField input{
     width : 80%;
     height: 25px;
-    margin: 10px 0px 10px 0px;
+    margin: 10px 0px 10px 40px;
 }
 
 .inputField textarea{
     width : 80%;
     height: 70px;
-    margin: 0px 0px 30px 0px;  
+    margin: 0px 0px 30px 40px !important;
+}
+.loginErrorTextFormat{
+    color: rgb(187, 27, 152);
+    padding-bottom: 10px;
+}
+
+input {
+  margin: 25px 0px 0px 0px;
+}
+
+.getlinkbutton{
+    width : 15%;
+    height: 30px;
+}
+
+.getlinkbutton input{
+    width : 15%;
+    height: 30px;   
+    margin: 20px 0px 0px 0px;
+}
+.nominatebutton input {
+    width : 15%;
+    height: 30px;   
+    margin: 20px 0px 0px 180px;
+}
+
+.getlinkbutton button{
+    width : 15%;
+    height: 30px;   
+    margin: 20px 0px 0px 0px;
+}
+
+.linkdetails {
+    width : 100%;
+    height: 50px;
+    margin: 30px 0px 0px 0px ;
+    background-color: rgb(103, 104, 105);
+    color: rgb(234, 234, 250);
 }

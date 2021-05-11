@@ -4,6 +4,7 @@ import "./cssmodules/createLink.css";
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import Dashboard from "./components/dashboard";
 import CreateLink from "./components/createLink";
+import Nominate from "./components/nominate";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Switch>
               <Route exact path='/' component={Dashboard} />
               <Route exact path='/createLink' component={CreateLink} />
+              <Route exact path='/nominate' component={Nominate} />
           </Switch>
         </div>
       </Router>
