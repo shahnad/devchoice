@@ -15,13 +15,13 @@
 .inputField input{
     width : 80%;
     height: 25px;
-    margin: 10px 0px 10px 40px;
+    margin: 10px 0px 10px 10px;
 }
 
 .inputField textarea{
     width : 80%;
     height: 70px;
-    margin: 0px 0px 30px 40px !important;
+    margin: 0px 0px 30px 10px !important;
 }
 .loginErrorTextFormat{
     color: rgb(187, 27, 152);
@@ -45,7 +45,7 @@ input {
 .nominatebutton input {
     width : 15%;
     height: 30px;   
-    margin: 20px 0px 0px 180px;
+    margin: 20px 0px 0px 10px;
 }
 
 .getlinkbutton button{
@@ -58,6 +58,12 @@ input {
     width : 100%;
     height: 50px;
     margin: 30px 0px 0px 0px ;
-    background-color: rgb(103, 104, 105);
+    background-color: rgb(95, 207, 235);
     color: rgb(234, 234, 250);
+}
+
+.nominatedby{
+    width : 100%;
+    height: 25px;
+    margin: 20px 0px 10px 0px;
 }

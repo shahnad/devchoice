@@ -1,10 +1,12 @@
 import './App.css';
 import "./cssmodules/dashboard.css";
 import "./cssmodules/createLink.css";
+import "./cssmodules/errorPage.css";
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import Dashboard from "./components/dashboard";
 import CreateLink from "./components/createLink";
 import Nominate from "./components/nominate";
+import ErrorPage from "./components/errorPage";
 
 function App() {
   return (
@@ -17,7 +19,8 @@ function App() {
           <Switch>
               <Route exact path='/' component={Dashboard} />
               <Route exact path='/createLink' component={CreateLink} />
-              <Route exact path='/nominate' component={Nominate} />
+              <Route path='/nominate/:token' component={Nominate} />
+              <Route path='/errorPage' component={ErrorPage} />
           </Switch>
         </div>
       </Router>

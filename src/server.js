@@ -3,6 +3,7 @@ const express = require('express');
 const bodyParser = require("body-parser");
 const { Sequelize, DataTypes } = require("sequelize");
 const linkTokenSchema = require('./server/models/linktoken');
+const nominationSchema = require('./server/models/nominations');
 const axios = require('axios');
 const path = require('path');
 const cors = require("cors");
@@ -37,6 +38,7 @@ const sequelize = new Sequelize(DB_NAME, DB_USERNAME, DB_PASSWORD, {
 });
 
 const LinkTokenModel = linkTokenSchema(sequelize, DataTypes);
+const NominationModel = nominationSchema(sequelize, DataTypes);
 
 app.use(cors({
   origin: "http://localhost:3000"
@@ -95,6 +97,22 @@ const jsonData =
        }
    ]
 
+/* This service is used to submit a nomination */
+app.put('/service/nominateperson', async (req, res) => {
+  try {
+    const nomineeName = req.body.nomineename;
+    const nomineeEmail = req.body.nomineeemail; 
+    const description = req.body.description; 
+    const nominatedBy = req.body.nominatedby; 
+    var data = {nomineename:nomineeName, email:nomineeEmail, description:description, nominatedby:nominatedBy};
+    const nominationData = await Availability.create(data);
+    res.status(200).send(nominationData);
+  } catch (e) {
+    res.status(500).json({ fail: e.message });
+  }
+});
+
+
 /* This service is used to display list of all nominations in the Dashboard under Recent nominations section: */
 app.get('/service/nominations', async (req, res) => {
   try {
@@ -124,12 +142,14 @@ app.post('/service/createlink', async (req, res) => {
     let base64data = buff.toString('base64');
     let validUptoDate = moment().add(2,'d') //replace 2 with number of days you want to add .toDate() and convert it to a Javascript Date Object if you like
     const linkTokenData = await LinkTokenModel.create({...req.body, email:userEmail, token:base64data, createdAt:currentDate, expiredAt:validUptoDate});  
-    
     res.status(200).json({ success: true });
   } catch (e) {
     res.status(500).json({ fail: e.message });
   }
 });
+
+
+//const tokenEmailRecord = await LinkTokenModel.count({ where: { email: userEmail } });
 
 /* This service is used to validate the created link and display the page for nomination */
 app.post('/service/validatelink', async (req, res) => {
@@ -146,7 +166,7 @@ app.post('/service/validatelink', async (req, res) => {
       let tokendata = tokenData;
       res.status(200).send(tokendata);
     } else {
-      res.status(404).json({ success: true });
+      res.status(404).json({ fail: "Nomination link expired !" });
     }
   } catch (e) {
     res.status(500).json({ fail: e.message });

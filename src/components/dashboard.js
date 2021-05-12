@@ -1,11 +1,13 @@
 import React, { useRef, useEffect, useState } from "react";
 import Axios from "axios";
+import { useHistory } from 'react-router-dom';
 
 const Dashboard = () => {
     const [nominationList, setNominationList] = useState([]);
     const [nominationCount, setNominationCount] = useState([]);
 
     const isMounted = useRef(false);
+    const history = useHistory();
 
     useEffect(() => {
         isMounted.current = true;
@@ -51,7 +53,7 @@ const Dashboard = () => {
                 <div className="column-1 box">
                     <h3>Menu</h3>
                     <div className="navlist menu">
-                        <span className="menuitem link">LINK 1</span>
+                        <span className="menuitem link" onClick={() => history.push('/createLink') }>Create Link</span>
                     </div>
                     <div className="navlist menu">
                         <span className="menuitem link">LINK 2</span>
