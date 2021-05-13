@@ -56,23 +56,23 @@ const Nominate = () => {
                     }
                       onChange={onChange}
                     /> 
-                    <span className="loginErrorTextFormat">{errors.nomineename && errors.nomineename.message}</span>
                 </div>
+                <span className="nominateError"><pre>{errors.nomineename && errors.nomineename.message}</pre></span>
                 <div className="inputField" >
                     <input name="email" 
                     placeholder="nominee email" 
                     type="text" 
                     {...register('email',{
-                        required: "Email is required !",
+                        required: "Nominee email is required !",
                         pattern: {
                             value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
                            message: "Invalid email address !"
                         }
                       })}
                       onChange={onChange}
-                    /><b></b>
-                    <span className="loginErrorTextFormat">{errors.email && errors.email.message}</span>
+                    />
                 </div>
+                <span className="nominateError"><pre>{errors.email && errors.email.message}</pre></span>
                 <div className="inputField" >
                     <textarea name="description" 
                     placeholder="reason for nomination"  
@@ -82,14 +82,14 @@ const Nominate = () => {
                       })}
                       onChange={onChange}
                     />
-                   <span className="loginErrorTextFormat">{errors.description && errors.description.message }</span> 
                 </div>
+                <span className="nominateError"><pre>{errors.description && errors.description.message }</pre></span>
                 <div className="inputField nominatedby" >
                     <input name="nominatedby" 
                     placeholder="nominated by" 
                     type="text" 
                     {...register('nominatedby',{
-                        required: "Nominate by is required !",
+                        required: "Nominated by is required !",
                         pattern: {
                           value: /^[a-zA-Z\s]{2,30}$/,
                           message: "Invalid name !"
@@ -97,8 +97,8 @@ const Nominate = () => {
                       })}
                       onChange={onChange}
                     /> 
-                    <span className="loginErrorTextFormat">{errors.nominatedby && errors.nominatedby.message}</span>
                 </div>
+                <span className="nominateError"><pre>{errors.nominatedby && errors.nominatedby.message}</pre></span>
                 <span className="getlinkbutton">
                     <input type="submit"/>
                 </span>

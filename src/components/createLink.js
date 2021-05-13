@@ -10,6 +10,7 @@ const CreateLink = () => {
     const [email, setEmail] = useState("");
     const [token, setToken] = useState("");
     const [tokenUrl, setTokenUrl] = useState("");
+    const [errorDisplay, setErrorDisplay] = useState("");
     const { handleSubmit, register, formState: { errors } } = useForm();
     const history = useHistory();
 
@@ -21,6 +22,8 @@ const CreateLink = () => {
                 const res = await Axios.post('http://localhost:8000/service/createlink', { email, token});
                 if (res.data) {
                     console.log("Link token created:" + res.data);
+                    setEmail("");
+                    setToken("");
                 }
             } catch (e) {
                 console.log(e);
@@ -35,7 +38,7 @@ const CreateLink = () => {
                 const email = localStorage.getItem("userEmail");
                 const res = await Axios.post('http://localhost:8000/service/validatelink', { params: { email} });
                 if (res.data) {
-                    const validToken = res.data[0].token;
+                    const validToken = res.data;
                     console.log("Get token :" + res.data[0].token);
                     const nominationUrl = 'http://localhost:3000/nominate/'+validToken;
                     window.localStorage.setItem("tokenlink", nominationUrl);
@@ -48,7 +51,7 @@ const CreateLink = () => {
                     }
                 }
             } catch (e) {
-                console.log(e);
+                setErrorDisplay(e.response.data.message);
             }
         }
         fetchData(); 
@@ -93,10 +96,13 @@ const CreateLink = () => {
                     <button type="button" onClick={validateLink}>Get Link</button>
                 </span>
                 {
-                    <div className="linkdetails nominationlink">
+                <div className="linkdetails nominationlink">
                        {tokenUrl}
-                    </div>
+                </div>
                 }
+                <div className="errorDetails">
+                       {errorDisplay}
+                </div>
             </form>
             
         </div>

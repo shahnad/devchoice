@@ -105,7 +105,7 @@ app.put('/service/nominateperson', async (req, res) => {
     const description = req.body.description; 
     const nominatedBy = req.body.nominatedby; 
     var data = {nomineename:nomineeName, email:nomineeEmail, description:description, nominatedby:nominatedBy};
-    const nominationData = await Availability.create(data);
+    const nominationData = await NominationModel.create(data);
     res.status(200).send(nominationData);
   } catch (e) {
     res.status(500).json({ fail: e.message });
@@ -140,7 +140,7 @@ app.post('/service/createlink', async (req, res) => {
     const data = userEmail+tokenData;
     let buff = new Buffer(data);
     let base64data = buff.toString('base64');
-    let validUptoDate = moment().add(2,'d') //replace 2 with number of days you want to add .toDate() and convert it to a Javascript Date Object if you like
+    let validUptoDate = moment().add(30,'minutes') //replace 2 with number of days you want to add .toDate() and convert it to a Javascript Date Object if you like
     const linkTokenData = await LinkTokenModel.create({...req.body, email:userEmail, token:base64data, createdAt:currentDate, expiredAt:validUptoDate});  
     res.status(200).json({ success: true });
   } catch (e) {
@@ -155,18 +155,19 @@ app.post('/service/createlink', async (req, res) => {
 app.post('/service/validatelink', async (req, res) => {
   try {
     const userEmail = req.params.email;
-    const data = await LinkTokenModel.findAll({ attributes: ['token','expiredAt']}, { where: { email: userEmail }} );
+    const data = await LinkTokenModel.findAll({ attributes: ['token','expiredAt']}, {where: { email: userEmail }});
     const expiryDate = data[0].expiredAt;
     const formattedExpiryDate = moment(expiryDate).format('YYYY-MM-DD hh:mm');
     const tokenData = data[0].token;
-    res.status(200).send(data);
     console.log("Get expiry date from table: "+formattedExpiryDate);
     console.log("Get current date: "+currentDate);
+    var now = moment(); 
+    var currentDate = moment(now).format('YYYY-MM-DD hh:mm');
     if(currentDate < formattedExpiryDate ){
       let tokendata = tokenData;
       res.status(200).send(tokendata);
     } else {
-      res.status(404).json({ fail: "Nomination link expired !" });
+      res.status(404).json({ message: "Nomination link expired, please create a new one..!" });
     }
   } catch (e) {
     res.status(500).json({ fail: e.message });

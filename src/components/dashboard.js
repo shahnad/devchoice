@@ -8,6 +8,7 @@ const Dashboard = () => {
 
     const isMounted = useRef(false);
     const history = useHistory();
+    
 
     useEffect(() => {
         isMounted.current = true;
