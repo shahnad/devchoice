@@ -47,66 +47,17 @@ app.use(cors({
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-
-const jsonData = 
-     [
-        {   
-            "id": 1,
-            "nominee": "John Brass",
-            "nomineeEmail": "john.brass@test.com",
-            "description": "Brilaint coding help done during sprint. Faster issue fixing.",
-            "nominatedby": "Vinod Mathew",
-
-        },
-        {
-            "id": 2,
-            "nominee": "Mat Dameon",
-            "nomineeEmail": "mat.dam@test.com",
-            "description": "Excellent coordination by Matt. Quick help.",
-            "nominatedby": "Sam Black",
-
-        },
-        {
-            "id": 3,
-            "nominee": "Sunny Donn",
-            "nomineeEmail": "sunny.donn@test.com",
-            "description": "Excellent coordination by Sunny. Fun and good development skills.",
-            "nominatedby": "Roger Fred",
-
-        }
-    ]
-
-
-    const jsonCount = 
-    [
-       {   
-           "id": 1,
-           "nominee": "John Brass",
-           "count":7
-       },
-       {
-           "id": 2,
-           "nominee": "Mat Dameon",
-           "count":3
-       },
-       {
-           "id": 3,
-           "nominee": "Sunny Donn",
-           "count":5
-
-       }
-   ]
-
 /* This service is used to submit a nomination */
-app.put('/service/nominateperson', async (req, res) => {
+app.post('/service/nominateperson', async (req, res) => {
   try {
     const nomineeName = req.body.nomineename;
-    const nomineeEmail = req.body.nomineeemail; 
-    const description = req.body.description; 
-    const nominatedBy = req.body.nominatedby; 
+    const nomineeEmail = req.body.email;
+    const description = req.body.description;
+    const nominatedBy = req.body.nominatedby;
     var data = {nomineename:nomineeName, email:nomineeEmail, description:description, nominatedby:nominatedBy};
+    console.log("Server side display nominations :" + data);
     const nominationData = await NominationModel.create(data);
-    res.status(200).send(nominationData);
+    res.status(200).json({message: "Nomination send successfully !"});
   } catch (e) {
     res.status(500).json({ fail: e.message });
   }
@@ -116,7 +67,8 @@ app.put('/service/nominateperson', async (req, res) => {
 /* This service is used to display list of all nominations in the Dashboard under Recent nominations section: */
 app.get('/service/nominations', async (req, res) => {
   try {
-    res.status(200).send(jsonData);
+      const nominationData = await NominationModel.findAll({ attributes: ['email','nomineename', 'description', 'nominatedby']});
+      res.status(200).send(nominationData);
   } catch (e) {
     res.status(500).json({ fail: e.message });
   }
@@ -126,14 +78,18 @@ app.get('/service/nominations', async (req, res) => {
 
 app.get('/service/nominationcount', async (req, res) => {
   try {
-    res.status(200).send(jsonCount);
+     const data = await NominationModel.findAll({
+          group: ['email'],
+          attributes: ['email', 'nomineename', [sequelize.fn('COUNT', 'email'), 'EmailCount']],
+      });
+      res.status(200).send(data);
   } catch (e) {
     res.status(500).json({ fail: e.message });
   }
 });
 
-/* This service is used to create a token data while creating a link */
-app.post('/service/createlink', async (req, res) => {
+/* This service is used to create and update token data while creating a link */
+app.put('/service/createlink', async (req, res) => {
   try {
     const userEmail = req.body.email;
     const tokenData = req.body.token;
@@ -141,15 +97,21 @@ app.post('/service/createlink', async (req, res) => {
     let buff = new Buffer(data);
     let base64data = buff.toString('base64');
     let validUptoDate = moment().add(30,'minutes') //replace 2 with number of days you want to add .toDate() and convert it to a Javascript Date Object if you like
-    const linkTokenData = await LinkTokenModel.create({...req.body, email:userEmail, token:base64data, createdAt:currentDate, expiredAt:validUptoDate});  
-    res.status(200).json({ success: true });
+    const tokenEmailRecord = await LinkTokenModel.count({ where: { email: userEmail } });
+    if(tokenEmailRecord == 0){
+      const linkTokenData = await LinkTokenModel.create({...req.body, email:userEmail, token:base64data, createdAt:currentDate, expiredAt:validUptoDate});  
+      res.status(200).json({ message: "Link created successfully !" });
+    } else {
+      const linkTokenData = await LinkTokenModel.update({...req.body, email:userEmail, token:base64data, createdAt:currentDate, expiredAt:validUptoDate},{where: { email: userEmail }});
+      res.status(200).json({ message: "Link updated successfully !" });
+    }
   } catch (e) {
     res.status(500).json({ fail: e.message });
   }
 });
 
 
-//const tokenEmailRecord = await LinkTokenModel.count({ where: { email: userEmail } });
+
 
 /* This service is used to validate the created link and display the page for nomination */
 app.post('/service/validatelink', async (req, res) => {

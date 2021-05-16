@@ -2,6 +2,7 @@ import './App.css';
 import "./cssmodules/dashboard.css";
 import "./cssmodules/createLink.css";
 import "./cssmodules/errorPage.css";
+import "./cssmodules/nominate.css";
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import Dashboard from "./components/dashboard";
 import CreateLink from "./components/createLink";

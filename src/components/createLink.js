@@ -19,7 +19,7 @@ const CreateLink = () => {
         const fetchData = async () => {
             try {
                 localStorage.setItem("userEmail", email);
-                const res = await Axios.post('http://localhost:8000/service/createlink', { email, token});
+                const res = await Axios.put('http://localhost:8000/service/createlink', { email, token});
                 if (res.data) {
                     console.log("Link token created:" + res.data);
                     setEmail("");
@@ -39,7 +39,7 @@ const CreateLink = () => {
                 const res = await Axios.post('http://localhost:8000/service/validatelink', { params: { email} });
                 if (res.data) {
                     const validToken = res.data;
-                    console.log("Get token :" + res.data[0].token);
+                    console.log("Get token :" + res.data);
                     const nominationUrl = 'http://localhost:3000/nominate/'+validToken;
                     window.localStorage.setItem("tokenlink", nominationUrl);
                     const linkUrl = window.localStorage.getItem("tokenlink");

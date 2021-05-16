@@ -33,12 +33,12 @@ input {
 }
 
 .getlinkbutton{
-    width : 15%;
+    width : 20%;
     height: 30px;
 }
 
 .getlinkbutton input{
-    width : 15%;
+    width : 20%;
     height: 30px;   
     margin: 20px 0px 0px 0px;
 }
@@ -49,7 +49,7 @@ input {
 }
 
 .getlinkbutton button{
-    width : 15%;
+    width : 20%;
     height: 30px;   
     margin: 20px 0px 0px 0px;
 }

@@ -7,41 +7,42 @@ import Axios from "axios";
 const Nominate = () => {
 
     const { token } = useParams();
-    const [formRegister, setRegister] = useState([{ _id: '', nomineename: '', nomineeemail: '', description: '', nominatedby: ''}]);
+    const [formRegister, setRegister] = useState({ _id: "", nomineename: "", email: "", description: "", nominatedby: ""});
     const { handleSubmit, register, formState: { errors } } = useForm();
+    const [helperText, setHelperText] = useState('');
 
     const onChange = (e) => {
         e.persist();
         setRegister({ ...formRegister, [e.target.name]: e.target.value });
-      }
-
+    }
+    const initialState = {
+        _id:"",
+        nomineename: "",
+        email: "",
+        description: "",
+        nominatedby: ""
+    };
     const onSubmit = () => {
-        const formData = new FormData();
-        for(let key in formRegister) {
-            formData.append(key,formRegister[key]);
-        }
-        const config = {
-            headers: {
-                'content-type': 'multipart/form-data' 
-            }
-          }
         const fetchData = async () => {
             try {
-                const res = await Axios.put('http://localhost:8000/service/nominateperson', formData, config);
+                const res = await Axios.post('http://localhost:8000/service/nominateperson', formRegister);
                 if (res.data) {
                     console.log("Link token created:" + res.data);
+                    const successMessage = res.data.message;
+                    setHelperText(successMessage);
+                    setRegister({...initialState});
                 }
             } catch (e) {
                 console.log(e);
             }
         }
-        fetchData(); 
+        fetchData();
     }
 
     return (
         <div className="App">
             <h1>Nominate Person</h1>
-            <form onSubmit={handleSubmit(onSubmit)}  className="linkForm inputForm">
+            <form onSubmit={handleSubmit(onSubmit)}  className="linkForm inputForm" encType="multipart/form-data">
                 <div className="inputField" >
                     <input name="nomineename" 
                     placeholder="nominate a person" 
@@ -75,10 +76,13 @@ const Nominate = () => {
                 <span className="nominateError"><pre>{errors.email && errors.email.message}</pre></span>
                 <div className="inputField" >
                     <textarea name="description" 
-                    placeholder="reason for nomination"  
-                    maxLength={1000}
+                    placeholder="reason for nomination"
                     {...register('description',{
-                        required: "Description is required !"
+                        required: "Description is required !",
+                        pattern: {
+                            value: /^[a-zA-Z\s]{10,1000}$/,
+                            message: "Min of 10 or not more than 1000 characters !"
+                        }
                       })}
                       onChange={onChange}
                     />
@@ -101,7 +105,10 @@ const Nominate = () => {
                 <span className="nominateError"><pre>{errors.nominatedby && errors.nominatedby.message}</pre></span>
                 <span className="getlinkbutton">
                     <input type="submit"/>
-                </span>
+                </span><br></br><br></br>
+                <label>
+                    <span className="loginValidationText">{helperText}</span>
+                </label>
             </form>
         </div>
     )
