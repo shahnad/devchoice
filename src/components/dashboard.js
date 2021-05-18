@@ -21,7 +21,7 @@ const useStyles = makeStyles(theme => ({
     form: {
         fontfamily: "Georgia",
         padding: "20px",
-        width: "10%",
+        width: "20%",
         maxWidth: "500px",
         background: "#f4f7f8"
     },
@@ -50,7 +50,7 @@ const useStyles = makeStyles(theme => ({
         borderWidth: "1px 1px 3px",
         marginBottom: "10px",
         padding: "10px",
-        marginLeft:"50px",
+        marginLeft:"90px",
         borderRadius:"5px"
     },
     label: {
@@ -58,6 +58,12 @@ const useStyles = makeStyles(theme => ({
         textAlign: "center",
         fontSize: "18px",
         paddingLeft:"35px"
+    },
+    p: {
+        color: "#161717",
+        textAlign: "center",
+        fontSize: "18px",
+
     }
 }));
 const Dashboard = props => {
@@ -65,7 +71,6 @@ const Dashboard = props => {
     const [nominationCount, setNominationCount] = useState([]);
     const [open, setOpen] = useState(false);
     const [nameText, setNameText] = useState("");
-    let nominee_name = useRef(null);
     const classes = useStyles();
 
     const isMounted = useRef(false);
@@ -108,9 +113,6 @@ const Dashboard = props => {
         fetchData();
     }, []);
 
-    const handleClick = () => {
-        setNameText(nominee_name.current.outerText);
-    }
 
     return (
         <div className="App">
@@ -167,23 +169,45 @@ const Dashboard = props => {
                             </div>
                             <div className="space_1 tile">
                                 <h3>Nominations Count</h3>
-                                <div className="grid-container">
                                 {
                                     !nominationCount.length && (<div className="nonominationdata">No nominations count to display !</div>)
                                 }
+                                <div className="grid-container">
+
                                 {
                                     nominationCount.map(data => (
                                         <div key={data.id}>
                                             <div onClick={() => {setOpen(!open); }} className="count badge" >
                                                 <span className="badgenumber" value={data.count} key={data.count}>{data.EmailCount}</span>
-                                                <span className="countname" key={data.nomineename}  ref={nominee_name} onClick={handleClick}>{data.nomineename}</span>
+                                                <span className="countname" key={data.nomineename}  onClick={()=>setNameText(data.nomineename)}>{data.nomineename}</span>
                                             </div>
                                         </div>
                                     ))
                                 }
                                 </div>
                             </div>
-                            <div className="space_1 tile"><h3>Old Nominations</h3></div>
+                            <div className="space_1 tile">
+                                <h3>Teamwise Nominations</h3>
+                                <div className="grid-container">
+                                    <div className="team-1">
+                                        <h5>Qa</h5>
+                                        <span className="data-1">Rod</span>
+                                        <span className="data-2">Singer</span>
+
+                                    </div>
+                                    <div className="team-2">
+                                        <h5>Dev</h5>
+                                        <span className="data-1">Sam</span>
+                                        <span className="data-2">Tim</span>
+                                    </div>
+                                    <div className="team-3">
+                                        <h5>Support</h5>
+                                    </div>
+                                    <div className="team-4">
+                                        <h5>Add Ons</h5>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -195,7 +219,8 @@ const Dashboard = props => {
                 }}
                 className={classes.modal}>
                 <form className={classes.form}>
-                    <label className={classes.label}>Confirm winner {nameText}</label>
+                    <label className={classes.label}>Are you sure to confirm the winner</label>
+                    <p className={classes.p}><b>{nameText}</b></p>
                     <input className={classes.submit} type="submit" value="Confirm" />
                 </form>
             </Modal>

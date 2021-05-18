@@ -5,8 +5,18 @@
 
 h1, h2, h3 {
     color: #ffffff;
+  font-size: 1.5em !important;
 }
 
+h5 {
+  color: #ffffff;
+  font-size: 1em !important;
+  margin-block-start: .5em;
+  margin-block-end: .5em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  font-weight: bold;
+}
 body {
   width: 100%;
   margin: 0;
@@ -36,7 +46,7 @@ body {
   background-color: #223054;
   padding: 10px 0px 0px 0px;
   margin-right: 15px;
-  height: 400px;
+  height: 500px;
   overflow: auto;
 }
 
@@ -196,4 +206,18 @@ p {
 }
 .nonominationdata{
   color :#cdd6da;
+  text-align: center;
+}
+
+.team-1, .team-2, .team-3, .team-4{
+  width:100px;
+  height: 100px;
+  background-color: #edc524;
+  margin: 0px 5px 20px 20px;
+}
+
+.data-1{
+  display: block;
+  vertical-align: text-top;
+  margin-bottom: 5px;
 }
