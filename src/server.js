@@ -53,9 +53,10 @@ app.post('/service/nominateperson', async (req, res) => {
   try {
     const nomineeName = req.body.nomineename;
     const nomineeEmail = req.body.email;
+    const nomineeTeam = req.body.nomineeteam;
     const description = req.body.description;
     const nominatedBy = req.body.nominatedby;
-    var data = {nomineename:nomineeName, email:nomineeEmail, description:description, nominatedby:nominatedBy};
+    var data = {nomineename:nomineeName, email:nomineeEmail, nomineeteam:nomineeTeam, description:description, nominatedby:nominatedBy};
     console.log("Server side display nominations :" + data);
     const checkTokenData = await LinkTokenModel.findAll({ attributes: ['token','expiredAt']});
     const expiryDate = checkTokenData[0].expiredAt;
@@ -78,7 +79,7 @@ app.post('/service/nominateperson', async (req, res) => {
 /* This service is used to display list of all nominations in the Dashboard under Recent nominations section: */
 app.get('/service/nominations', async (req, res) => {
   try {
-      const nominationData = await NominationModel.findAll({ attributes: ['email','nomineename', 'description', 'nominatedby']});
+      const nominationData = await NominationModel.findAll({ attributes: ['email','nomineename', 'nomineeteam','description', 'nominatedby']});
       res.status(200).send(nominationData);
   } catch (e) {
     res.status(500).json({ fail: e.message });
@@ -94,6 +95,20 @@ app.get('/service/nominationcount', async (req, res) => {
           attributes: ['email', 'nomineename', [sequelize.fn('COUNT', 'email'), 'EmailCount']],
       });
       res.status(200).send(data);
+  } catch (e) {
+    res.status(500).json({ fail: e.message });
+  }
+});
+
+/* This service is used to display the teamwise names of the nominees : */
+
+app.get('/service/teamwisenomination', async (req, res) => {
+  try {
+    const data = await NominationModel.findAll({
+      group: ['nomineeteam'],
+      attributes: ['nomineename', 'nomineeteam']
+    });
+    res.status(200).send(data);
   } catch (e) {
     res.status(500).json({ fail: e.message });
   }

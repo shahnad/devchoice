@@ -14,6 +14,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING(200),
             allowNull: false
         },
+        nomineeteam: {
+            type: DataTypes.STRING(100),
+            allowNull: false
+        },
         description: {
             type: DataTypes.STRING(1000),
             allowNull: false

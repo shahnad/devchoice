@@ -72,6 +72,7 @@ const useStyles = makeStyles(theme => ({
 const Dashboard = props => {
     const [nominationList, setNominationList] = useState([]);
     const [nominationCount, setNominationCount] = useState([]);
+    const [teamwiseNomination, setTeamwiseNomination] = useState([]);
     const [image, setImage] = useState("");
     const [open, setOpen] = useState(false);
     const [nameText, setNameText] = useState("");
@@ -114,6 +115,22 @@ const Dashboard = props => {
                 if (isMounted.current) {
                     setNominationCount(res.data);
                     console.log("Nomination count data from server :" + res.data);
+                }
+            } catch (e) {
+                console.log(e);
+            }
+        }
+        fetchData();
+    }, []);
+
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const res = await Axios.get('http://localhost:8000/service/teamwisenomination');
+                if (isMounted.current) {
+                    setTeamwiseNomination(res.data);
+                    console.log("Team wise nomination from server :" + res.data);
                 }
             } catch (e) {
                 console.log(e);
@@ -225,23 +242,14 @@ const Dashboard = props => {
                             <div className="space_1 tile">
                                 <h3>Teamwise Nominations</h3>
                                 <div className="grid-container">
-                                    <div className="team-1">
-                                        <h5>Qa</h5>
-                                        <span className="data-1">Rod</span>
-                                        <span className="data-2">Singer</span>
-
-                                    </div>
-                                    <div className="team-2">
-                                        <h5>Dev</h5>
-                                        <span className="data-1">Sam</span>
-                                        <span className="data-2">Tim</span>
-                                    </div>
-                                    <div className="team-3">
-                                        <h5>Support</h5>
-                                    </div>
-                                    <div className="team-4">
-                                        <h5>Add Ons</h5>
-                                    </div>
+                                    {
+                                        teamwiseNomination.map(data =>(
+                                        <div key={data.id} className="team-1">
+                                            <h5 key={data.nomineeteam}>{data.nomineeteam}</h5>
+                                            <span key={data.nomineename} className="data-1">{data.nomineename}</span>
+                                        </div>
+                                        ))
+                                    }
                                 </div>
                             </div>
                         </div>
