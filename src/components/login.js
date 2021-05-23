@@ -35,16 +35,21 @@ const Login = () => {
         accessType: 'offline',
     })
 
+
     return (
         <div className="App">
             <h1>Login</h1>
-            <div className="inputForm">
+            <div className="loginForm">
+                <h3>Dev Choice Login</h3>
                 <button onClick={signIn}>
                     <img src="images/google.png" className="loginG"/>
                     <span className="loginText">Sign in</span>
-                </button>
-            </div>
+                </button><br></br>
+                <div className="loginDevchoice">
 
+                </div>
+
+            </div>
         </div>
 
     )
