@@ -1,6 +1,7 @@
 const moment = require('moment');
 const express = require('express');
 const bodyParser = require("body-parser");
+require('dotenv').config();
 const { Sequelize, DataTypes } = require("sequelize");
 const linkTokenSchema = require('./server/models/linktoken');
 const nominationSchema = require('./server/models/nominations');
@@ -47,7 +48,7 @@ app.use(cors({
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-/* This service is used to submit a nomination */
+/* This service is used to submit a nomination and will display invalid link if token expired */
 app.post('/service/nominateperson', async (req, res) => {
   try {
     const nomineeName = req.body.nomineename;
@@ -56,8 +57,18 @@ app.post('/service/nominateperson', async (req, res) => {
     const nominatedBy = req.body.nominatedby;
     var data = {nomineename:nomineeName, email:nomineeEmail, description:description, nominatedby:nominatedBy};
     console.log("Server side display nominations :" + data);
-    const nominationData = await NominationModel.create(data);
-    res.status(200).json({message: "Nomination send successfully !"});
+    const checkTokenData = await LinkTokenModel.findAll({ attributes: ['token','expiredAt']});
+    const expiryDate = checkTokenData[0].expiredAt;
+    const formattedExpiryDate = moment(expiryDate).format('YYYY-MM-DD hh:mm');
+    const tokenData = checkTokenData[0].token;
+    var now = moment();
+    var currentDate = moment(now).format('YYYY-MM-DD hh:mm');
+    if(currentDate < formattedExpiryDate ){
+      const nominationData = await NominationModel.create(data);
+      res.status(200).json({message: "Nomination send successfully !"});
+    } else {
+      res.status(404).json({ fail:true});
+    }
   } catch (e) {
     res.status(500).json({ fail: e.message });
   }
@@ -96,14 +107,14 @@ app.put('/service/createlink', async (req, res) => {
     const data = userEmail+tokenData;
     let buff = new Buffer(data);
     let base64data = buff.toString('base64');
-    let validUptoDate = moment().add(30,'minutes') //replace 2 with number of days you want to add .toDate() and convert it to a Javascript Date Object if you like
+    let validUptoDate = moment().add(5,'minutes') //replace 2 with number of days you want to add .toDate() and convert it to a Javascript Date Object if you like
     const tokenEmailRecord = await LinkTokenModel.count({ where: { email: userEmail } });
     if(tokenEmailRecord == 0){
       const linkTokenData = await LinkTokenModel.create({...req.body, email:userEmail, token:base64data, createdAt:currentDate, expiredAt:validUptoDate});  
-      res.status(200).json({ message: "Link created successfully !" });
+      res.status(200).json({ message: "Token created successfully !" });
     } else {
       const linkTokenData = await LinkTokenModel.update({...req.body, email:userEmail, token:base64data, createdAt:currentDate, expiredAt:validUptoDate},{where: { email: userEmail }});
-      res.status(200).json({ message: "Link updated successfully !" });
+      res.status(200).json({ message: "Token updated successfully !" });
     }
   } catch (e) {
     res.status(500).json({ fail: e.message });

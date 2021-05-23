@@ -11,6 +11,7 @@ const CreateLink = () => {
     const [token, setToken] = useState("");
     const [tokenUrl, setTokenUrl] = useState("");
     const [errorDisplay, setErrorDisplay] = useState("");
+    const [helperText, setHelperText] = useState('');
     const { handleSubmit, register, formState: { errors } } = useForm();
     const history = useHistory();
 
@@ -24,6 +25,8 @@ const CreateLink = () => {
                     console.log("Link token created:" + res.data);
                     setEmail("");
                     setToken("");
+                    const successMessage = res.data.message;
+                    setHelperText(successMessage);
                 }
             } catch (e) {
                 console.log(e);
@@ -103,6 +106,9 @@ const CreateLink = () => {
                 <div className="errorDetails">
                        {errorDisplay}
                 </div>
+                <label>
+                    <span className="loginValidationText">{helperText}</span>
+                </label>
             </form>
             
         </div>

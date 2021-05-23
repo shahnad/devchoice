@@ -1,12 +1,12 @@
 import React from "react";
-const ErrorPage = () => {
+const PageNotFound = () => {
 
     return (
         <div className="error_wrapper">
             <div className="error404Display"><b>404</b></div>
-            <div className="error404Text">Uh oh..! Following link has expired !</div>
+            <div className="error404Text">Page not found !</div>
         </div>
     )
 
 }
-export default ErrorPage;
+export default PageNotFound;

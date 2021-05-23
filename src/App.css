@@ -34,17 +34,5 @@
   }
 }
 
-.nav-link {
-  width: 100px;
-  color: #ffffff;
-  text-decoration: none;
-  margin: 0px 0px 5px 20px;
-  text-align: center;
-  
-}
 
-.navbar-nav a:hover{
-  color: #ffffff;
-  background-color: #1f6fbb;
-}
 

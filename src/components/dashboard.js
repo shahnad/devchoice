@@ -1,8 +1,11 @@
 import React, { useRef, useEffect, useState } from "react";
 import Axios from "axios";
-import { useHistory } from 'react-router-dom';
+import {Link, useHistory} from 'react-router-dom';
 import Modal from "@material-ui/core/Modal";
 import { makeStyles } from "@material-ui/core/styles";
+import { useGoogleLogout  } from 'react-google-login';
+
+const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 
 const useStyles = makeStyles(theme => ({
     modal: {
@@ -69,6 +72,7 @@ const useStyles = makeStyles(theme => ({
 const Dashboard = props => {
     const [nominationList, setNominationList] = useState([]);
     const [nominationCount, setNominationCount] = useState([]);
+    const [image, setImage] = useState("");
     const [open, setOpen] = useState(false);
     const [nameText, setNameText] = useState("");
     const classes = useStyles();
@@ -81,6 +85,11 @@ const Dashboard = props => {
         isMounted.current = true;
         return () => isMounted.current = false;
     }, []);
+
+    useEffect(() =>{
+     const userImage = window.localStorage.getItem("userImage");
+     setImage(userImage);
+    })
 
     useEffect(() => {
         const fetchData = async () => {
@@ -113,10 +122,37 @@ const Dashboard = props => {
         fetchData();
     }, []);
 
+    const onLogoutSuccess = (res) => {
+        localStorage.removeItem("loginEmail");
+        localStorage.removeItem("userImage");
+        history.push("/");
+        console.log("Logged out successfully !");
+    }
+
+    const onFailure = () => {
+        console.log("Handle failure cases !")
+    }
+    const { signOut } = useGoogleLogout ({
+        clientId,
+        onLogoutSuccess,
+        onFailure
+    })
+
 
     return (
         <div className="App">
-            <h1>Dev Choice Awards</h1>
+            <div className="navbar-nav">
+                <a><Link to={'/dashboard'} className="nav-link"> <b>Dashboard</b> </Link></a>
+                <a><Link to={'/createLink'} className="nav-link"> <b>Create Link</b> </Link></a>
+                <div className="profileImage">
+                    <img src={image}></img>
+                    <span className="dropdown-content">
+                        <a href="" onClick={signOut}>Log out</a>
+                    </span>
+                </div>
+            </div>
+
+
             <div className="container">
                 <div className="column-1 box">
                     <h3>Menu</h3>

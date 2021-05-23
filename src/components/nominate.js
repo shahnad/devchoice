@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState } from "react";
 import { useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import Axios from "axios";
+import { useHistory } from 'react-router-dom';
 
 
 const Nominate = () => {
@@ -10,6 +11,7 @@ const Nominate = () => {
     const [formRegister, setRegister] = useState({ _id: "", nomineename: "", email: "", description: "", nominatedby: ""});
     const { handleSubmit, register, formState: { errors } } = useForm();
     const [helperText, setHelperText] = useState('');
+    const history = useHistory();
 
     const onChange = (e) => {
         e.persist();
@@ -34,6 +36,7 @@ const Nominate = () => {
                 }
             } catch (e) {
                 console.log(e);
+                history.push('/errorPage');
             }
         }
         fetchData();
@@ -80,7 +83,7 @@ const Nominate = () => {
                     {...register('description',{
                         required: "Description is required !",
                         pattern: {
-                            value: /^[a-zA-Z\s]{10,1000}$/,
+                            value: /^[a-zA-Z,.!""\s]{10,1000}$/,
                             message: "Min of 10 or not more than 1000 characters !"
                         }
                       })}
