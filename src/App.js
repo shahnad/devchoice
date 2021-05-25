@@ -22,7 +22,7 @@ function App() {
               <ProtectedRoute exact path='/createLink' component={CreateLink} />
               <Route exact path='/' component={Login} />
               <Route path='/nominate/:token' component={Nominate} />
-              <Route path='/errorPage' component={ErrorPage} />
+              <Route path='/errorPage/' component={ErrorPage} />
               <Route path='*' component={PageNotFound} />
           </Switch>
         </div>

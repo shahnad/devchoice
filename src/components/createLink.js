@@ -15,7 +15,10 @@ const CreateLink = () => {
     const { handleSubmit, register, formState: { errors } } = useForm();
     const history = useHistory();
 
-   
+   useEffect(()=>{
+       const linkUrl = window.localStorage.getItem("tokenlink");
+       setTokenUrl(linkUrl);
+   })
     const onSubmit = () => {
         const fetchData = async () => {
             try {
@@ -45,8 +48,6 @@ const CreateLink = () => {
                     console.log("Get token :" + res.data);
                     const nominationUrl = 'http://localhost:3000/nominate/'+validToken;
                     window.localStorage.setItem("tokenlink", nominationUrl);
-                    const linkUrl = window.localStorage.getItem("tokenlink");
-                    
                     if( (validToken !== null) || ( validToken !== undefined) || ( validToken !== "")){
                         history.push(`/nominate/${validToken}`);
                     } else{
@@ -54,6 +55,7 @@ const CreateLink = () => {
                     }
                 }
             } catch (e) {
+                localStorage.removeItem("tokenlink");
                 setErrorDisplay(e.response.data.message);
             }
         }
@@ -62,7 +64,7 @@ const CreateLink = () => {
 
     return (
         <div className="App">
-            <h1>Create Link</h1>
+            <h1>Create a link</h1>
             <form onSubmit={handleSubmit(onSubmit)} className="linkForm inputForm">
                 <div className="inputField" >
                     <input name="email" 
@@ -100,7 +102,7 @@ const CreateLink = () => {
                 </span>
                 {
                 <div className="linkdetails nominationlink">
-                       {tokenUrl}
+                    <pre>{tokenUrl}</pre>
                 </div>
                 }
                 <div className="errorDetails">

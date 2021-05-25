@@ -73,6 +73,8 @@ const Dashboard = props => {
     const [nominationList, setNominationList] = useState([]);
     const [nominationCount, setNominationCount] = useState([]);
     const [teamwiseNomination, setTeamwiseNomination] = useState([]);
+    const [dashboardView, setDashboardView] = useState([]);
+    const [loginUserEmail, setLoginUserEmail] = useState("");
     const [image, setImage] = useState("");
     const [open, setOpen] = useState(false);
     const [nameText, setNameText] = useState("");
@@ -139,6 +141,24 @@ const Dashboard = props => {
         fetchData();
     }, []);
 
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const email = localStorage.getItem("loginEmail");
+            try {
+                const res = await Axios.get('http://localhost:8000/service/dashboardview', {email});
+                if (isMounted.current) {
+                    setDashboardView(res.data);
+                    setLoginUserEmail(email);
+                    console.log("Allow nom data to view for created user:" + res.data);
+                }
+            } catch (e) {
+                console.log(e);
+            }
+        }
+        fetchData();
+    }, []);
+
     const onLogoutSuccess = (res) => {
         localStorage.removeItem("loginEmail");
         localStorage.removeItem("userImage");
@@ -159,17 +179,17 @@ const Dashboard = props => {
     return (
         <div className="App">
             <div className="navbar-nav">
-                <a><Link to={'/dashboard'} className="nav-link"> <b>Dashboard</b> </Link></a>
-                <a><Link to={'/createLink'} className="nav-link"> <b>Create Link</b> </Link></a>
+                <div className="leftNavItem">
+                    <a><Link to={'/dashboard'} className="nav-link"> <b>Dashboard</b> </Link></a>
+                    <a><Link to={'/createLink'} className="nav-link"> <b>Create Link</b> </Link></a>
+                </div>
                 <div className="profileImage">
-                    <img src={image}></img>
+                        <img src={image}></img>
                     <span className="dropdown-content">
                         <a href="" onClick={signOut}>Log out</a>
                     </span>
                 </div>
             </div>
-
-
             <div className="container">
                 <div className="column-1 box">
                     <h3>Menu</h3>
@@ -182,7 +202,7 @@ const Dashboard = props => {
                 </div>
                 <div className="column-2 box">
                     <div className="levelmain">
-                        <h3>Recent Nominations</h3>
+                        <h3>Dev Choice Nominations</h3>
                         {
                             !nominationList.length && (<div className="nonominationdata">Sorry, no nominations to display !</div>)
                         }
@@ -207,6 +227,7 @@ const Dashboard = props => {
                                 ))
                             }
                         </div>
+
                     </div>
                     <div className="leveldown">
                         <div className="container">
@@ -215,7 +236,7 @@ const Dashboard = props => {
                                 <div className="oldwinner">
                                     <div className="winnerIcon">
                                         <img src="/images/trophy1.png"></img>
-                                        <span className="winner name">Vinod Mathew</span>
+                                        <span className="winner name">Rod Tergen</span>
                                         <span className="winner date">25 Apr 2021</span>
                                     </div>
                                 </div>
@@ -242,13 +263,24 @@ const Dashboard = props => {
                             <div className="space_1 tile">
                                 <h3>Teamwise Nominations</h3>
                                 <div className="grid-container">
+
                                     {
-                                        teamwiseNomination.map(data =>(
-                                        <div key={data.id} className="team-1">
-                                            <h5 key={data.nomineeteam}>{data.nomineeteam}</h5>
-                                            <span key={data.nomineename} className="data-1">{data.nomineename}</span>
-                                        </div>
-                                        ))
+                                        teamwiseNomination.map(data => {
+                                            if (data.nomineeteam === "QA" ) {
+                                                // add name for QA here
+                                            } else if (data.nomineeteam === "DEV" ) {
+                                                // add name for DEV here
+                                            } else if (data.nomineeteam === "Support" ) {
+                                                // add name for Support here
+                                            }
+
+                                            return (
+                                                <div key={data.id} className="team-1">
+                                                    <h5>{data.nomineeteam}</h5>
+                                                    <span className="data-1">{data.nomineename}</span>
+                                                </div>
+                                            );
+                                        })
                                     }
                                 </div>
                             </div>

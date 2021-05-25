@@ -48,6 +48,7 @@ app.use(cors({
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+
 /* This service is used to submit a nomination and will display invalid link if token expired */
 app.post('/service/nominateperson', async (req, res) => {
   try {
@@ -86,8 +87,8 @@ app.get('/service/nominations', async (req, res) => {
   }
 });
 
-/* This service is used to display the count of nominations received for a nominee in the Dashboard under Nominations count section: */
 
+/* This service is used to display the count of nominations received for a nominee in the Dashboard under Nominations count section: */
 app.get('/service/nominationcount', async (req, res) => {
   try {
      const data = await NominationModel.findAll({
@@ -100,12 +101,11 @@ app.get('/service/nominationcount', async (req, res) => {
   }
 });
 
-/* This service is used to display the teamwise names of the nominees : */
 
+/* This service is used to display the teamwise names of the nominees : */
 app.get('/service/teamwisenomination', async (req, res) => {
   try {
     const data = await NominationModel.findAll({
-      group: ['nomineeteam'],
       attributes: ['nomineename', 'nomineeteam']
     });
     res.status(200).send(data);
@@ -113,6 +113,7 @@ app.get('/service/teamwisenomination', async (req, res) => {
     res.status(500).json({ fail: e.message });
   }
 });
+
 
 /* This service is used to create and update token data while creating a link */
 app.put('/service/createlink', async (req, res) => {
@@ -137,8 +138,6 @@ app.put('/service/createlink', async (req, res) => {
 });
 
 
-
-
 /* This service is used to validate the created link and display the page for nomination */
 app.post('/service/validatelink', async (req, res) => {
   try {
@@ -148,9 +147,9 @@ app.post('/service/validatelink', async (req, res) => {
     const formattedExpiryDate = moment(expiryDate).format('YYYY-MM-DD hh:mm');
     const tokenData = data[0].token;
     console.log("Get expiry date from table: "+formattedExpiryDate);
-    console.log("Get current date: "+currentDate);
     var now = moment(); 
     var currentDate = moment(now).format('YYYY-MM-DD hh:mm');
+    console.log("Get current date: "+currentDate);
     if(currentDate < formattedExpiryDate ){
       let tokendata = tokenData;
       res.status(200).send(tokendata);
@@ -162,7 +161,16 @@ app.post('/service/validatelink', async (req, res) => {
   }
 });
 
-
+/* This service is used to get the email of the person who created token and dashboard should be available to that login only : */
+app.get('/service/dashboardview', async (req, res) => {
+  try {
+    const userEmail = req.body.email;
+    const dashboardData = await LinkTokenModel.findAll({ attributes: ['email','token']}, {where: { email: userEmail }});
+    res.status(200).send(dashboardData);
+  } catch (e) {
+    res.status(500).json({ fail: e.message });
+  }
+});
 
 (async () => {
   try {
