@@ -5,6 +5,7 @@ require('dotenv').config();
 const { Sequelize, DataTypes } = require("sequelize");
 const linkTokenSchema = require('./server/models/linktoken');
 const nominationSchema = require('./server/models/nominations');
+const nominationWinnerSchema = require('./server/models/nominationwinner');
 const axios = require('axios');
 const path = require('path');
 const cors = require("cors");
@@ -40,6 +41,8 @@ const sequelize = new Sequelize(DB_NAME, DB_USERNAME, DB_PASSWORD, {
 
 const LinkTokenModel = linkTokenSchema(sequelize, DataTypes);
 const NominationModel = nominationSchema(sequelize, DataTypes);
+const NominationWinnerModel = nominationWinnerSchema(sequelize, DataTypes);
+
 
 app.use(cors({
   origin: "http://localhost:3000"
@@ -167,6 +170,30 @@ app.get('/service/dashboardview', async (req, res) => {
     const userEmail = req.body.email;
     const dashboardData = await LinkTokenModel.findAll({ attributes: ['email','token']}, {where: { email: userEmail }});
     res.status(200).send(dashboardData);
+  } catch (e) {
+    res.status(500).json({ fail: e.message });
+  }
+});
+
+/* This service is used to save the winner data into the nomination winner table : */
+app.post('/service/confirmwinner', async (req, res) => {
+  try {
+    const winnerEmail = req.body.email;
+    const winnerName = req.body.name;
+    var data = {email:winnerEmail, winner:winnerName};
+    const winnerData = await NominationWinnerModel.create(data);
+    res.status(200).send(winnerData);
+  } catch (e) {
+    res.status(500).json({ fail: e.message });
+  }
+});
+
+/* This service is used to get the latest winner data from the nomination winner table : */
+app.get('/service/displaywinner', async (req, res) => {
+  try {
+    const winnerEmail = req.body.email;
+    const data = await NominationWinnerModel.findAll({ attributes: ['winner', 'createdAt']}, {where: { email: winnerEmail }});
+    res.status(200).send(data);
   } catch (e) {
     res.status(500).json({ fail: e.message });
   }

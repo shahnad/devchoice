@@ -60,6 +60,10 @@ body {
   padding: 10px;
   background-color: #223054;
   height: 200px;
+  overflow: hidden;
+}
+.space_1:hover {
+  overflow-y: scroll;
 }
 
 .tile {
@@ -238,6 +242,10 @@ p {
   display: block;
   vertical-align: text-top;
   margin-bottom: 5px;
+  font-family: 'GT Flexa Variable', 'GT Flexa', sans-serif;
+  font-size: .7rem ;
+  font-weight: bold;
+  color: #323336;
 }
 
 .nav-link {
@@ -296,3 +304,4 @@ p {
 }
 
 .profileImage:hover .dropdown-content {display: block;}
+

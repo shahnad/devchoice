@@ -46,9 +46,7 @@ const Login = () => {
                     <span className="loginText">Sign in</span>
                 </button><br></br>
                 <div className="loginDevchoice">
-
                 </div>
-
             </div>
         </div>
 

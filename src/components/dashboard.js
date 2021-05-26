@@ -4,6 +4,7 @@ import {Link, useHistory} from 'react-router-dom';
 import Modal from "@material-ui/core/Modal";
 import { makeStyles } from "@material-ui/core/styles";
 import { useGoogleLogout  } from 'react-google-login';
+const moment = require('moment');
 
 const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 
@@ -75,9 +76,11 @@ const Dashboard = props => {
     const [teamwiseNomination, setTeamwiseNomination] = useState([]);
     const [dashboardView, setDashboardView] = useState([]);
     const [loginUserEmail, setLoginUserEmail] = useState("");
+    const [displayWinner, setDisplayWinner] = useState([]);
     const [image, setImage] = useState("");
     const [open, setOpen] = useState(false);
     const [nameText, setNameText] = useState("");
+    const [emailText, setEmailText] = useState("");
     const classes = useStyles();
 
     const isMounted = useRef(false);
@@ -101,6 +104,22 @@ const Dashboard = props => {
                 if (isMounted.current) {
                     setNominationList(res.data);
                     console.log("Nomination data from server :" + res.data);
+                }
+            } catch (e) {
+                console.log(e);
+            }
+        }
+        fetchData();
+    }, []);
+
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const res = await Axios.get('http://localhost:8000/service/displaywinner');
+                if (isMounted.current) {
+                    setDisplayWinner(res.data);
+                    console.log("Get winner data from server :" + res.data);
                 }
             } catch (e) {
                 console.log(e);
@@ -159,6 +178,22 @@ const Dashboard = props => {
         fetchData();
     }, []);
 
+    const confirmWinner = () =>{
+        const fetchData = async () => {
+            const email = emailText;
+            const name = nameText;
+            try {
+                const res = await Axios.post('http://localhost:8000/service/confirmwinner', {email, name});
+                if (isMounted.current) {
+                    console.log("Send winner data:" + res.data);
+                }
+            } catch (e) {
+                console.log(e);
+            }
+        }
+        fetchData();
+    }
+
     const onLogoutSuccess = (res) => {
         localStorage.removeItem("loginEmail");
         localStorage.removeItem("userImage");
@@ -175,6 +210,11 @@ const Dashboard = props => {
         onFailure
     })
 
+    const teams = teamwiseNomination.reduce((teams, team) => {
+        if (!teams[team.nomineeteam]) teams[team.nomineeteam] = [];
+        teams[team.nomineeteam].push(team.nomineename);
+        return teams;
+    }, {});
 
     return (
         <div className="App">
@@ -197,7 +237,7 @@ const Dashboard = props => {
                         <span className="menuitem link" onClick={() => history.push('/createLink') }>Create Link</span>
                     </div>
                     <div className="navlist menu">
-                        <span className="menuitem link">LINK 2</span>
+                        <span className="menuitem link"></span>
                     </div>
                 </div>
                 <div className="column-2 box">
@@ -233,13 +273,20 @@ const Dashboard = props => {
                         <div className="container">
                             <div className="space_1 tile">
                                 <h3>Previous Winners</h3>
-                                <div className="oldwinner">
-                                    <div className="winnerIcon">
-                                        <img src="/images/trophy1.png"></img>
-                                        <span className="winner name">Rod Tergen</span>
-                                        <span className="winner date">25 Apr 2021</span>
+                                {
+                                    !displayWinner.length && (<div className="nonominationdata">No winners to display !</div>)
+                                }
+                                {
+                                    displayWinner.map(data => (
+                                    <div key={data.id}className="oldwinner">
+                                        <div className="winnerIcon">
+                                            <img src="/images/trophy1.png"></img>
+                                            <span key={data.winner} className="winner name">{data.winner}</span>
+                                            <span key={data.createdAt} className="winner date">{moment(data.createdAt).format('DD-MMM-YYYY')}</span>
+                                        </div>
                                     </div>
-                                </div>
+                                    ))
+                                }
                             </div>
                             <div className="space_1 tile">
                                 <h3>Nominations Count</h3>
@@ -251,9 +298,10 @@ const Dashboard = props => {
                                 {
                                     nominationCount.map(data => (
                                         <div key={data.id}>
-                                            <div onClick={() => {setOpen(!open); }} className="count badge" >
+                                            <div onClick={() => {setOpen(!open); setEmailText(data.email); setNameText(data.nomineename)}} className="count badge" >
                                                 <span className="badgenumber" value={data.count} key={data.count}>{data.EmailCount}</span>
                                                 <span className="countname" key={data.nomineename}  onClick={()=>setNameText(data.nomineename)}>{data.nomineename}</span>
+                                                <span hidden={true} key={data.email}>{data.email}</span>
                                             </div>
                                         </div>
                                     ))
@@ -263,24 +311,17 @@ const Dashboard = props => {
                             <div className="space_1 tile">
                                 <h3>Teamwise Nominations</h3>
                                 <div className="grid-container">
-
                                     {
-                                        teamwiseNomination.map(data => {
-                                            if (data.nomineeteam === "QA" ) {
-                                                // add name for QA here
-                                            } else if (data.nomineeteam === "DEV" ) {
-                                                // add name for DEV here
-                                            } else if (data.nomineeteam === "Support" ) {
-                                                // add name for Support here
-                                            }
-
-                                            return (
-                                                <div key={data.id} className="team-1">
-                                                    <h5>{data.nomineeteam}</h5>
-                                                    <span className="data-1">{data.nomineename}</span>
-                                                </div>
-                                            );
-                                        })
+                                        Object.entries(teams).map(([team, names]) => (
+                                        <div key={team} className="team-1">
+                                            <h5>{team}</h5>
+                                            {names.map((name) => (
+                                                <span key={name} className="data-1">
+                                                    {name}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    ))
                                     }
                                 </div>
                             </div>
@@ -295,9 +336,8 @@ const Dashboard = props => {
                 }}
                 className={classes.modal}>
                 <form className={classes.form}>
-                    <label className={classes.label}>Are you sure to confirm the winner</label>
-                    <p className={classes.p}><b>{nameText}</b></p>
-                    <input className={classes.submit} type="submit" value="Confirm" />
+                    <label className={classes.label}>Please confirm <b>{nameText}</b> as the winner ?</label>
+                    <input className={classes.submit} type="submit" value="Confirm" onClick={confirmWinner} />
                 </form>
             </Modal>
         </div>
