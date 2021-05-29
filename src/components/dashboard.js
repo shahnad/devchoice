@@ -277,7 +277,7 @@ const Dashboard = props => {
                                     !displayWinner.length && (<div className="nonominationdata">No winners to display !</div>)
                                 }
                                 {
-                                    displayWinner.map(data => (
+                                    displayWinner.sort((a, b) => moment(b.createdAt) - moment(a.createdAt)).map(data => (
                                     <div key={data.id}className="oldwinner">
                                         <div className="winnerIcon">
                                             <img src="/images/trophy1.png"></img>

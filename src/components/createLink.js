@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import { useForm } from 'react-hook-form';
 import Axios from "axios";
-import { useHistory } from 'react-router-dom';
+import {Link, useHistory} from 'react-router-dom';
 
 
 const CreateLink = () => {
@@ -64,8 +64,12 @@ const CreateLink = () => {
 
     return (
         <div className="App">
-            <h1>Create a link</h1>
+            <div className="leftNavItem">
+                <a><Link to={'/dashboard'} className="nav-link"> <b>Dashboard</b> </Link></a>
+            </div>
+
             <form onSubmit={handleSubmit(onSubmit)} className="linkForm inputForm">
+                <span className="headerLink"><h1>Create a link</h1></span>
                 <div className="inputField" >
                     <input name="email" 
                     placeholder="email" 
