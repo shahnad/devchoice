@@ -94,6 +94,5 @@ input {
 .nominateError pre {
     font-family: monospace;
     white-space: pre;
-    font-size: 1rem !important;
     font-weight: smaller;
 }

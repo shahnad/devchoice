@@ -100,7 +100,7 @@ const Nominate = () => {
                     <textarea name="description" 
                     placeholder="reason for nomination"
                     {...register('description',{
-                        required: "Description is required !",
+                        required: "Reason for nomination is required !",
                         pattern: {
                             value: /^[a-zA-Z,.!""\s]{10,1000}$/,
                             message: "Min of 10 or not more than 1000 characters !"

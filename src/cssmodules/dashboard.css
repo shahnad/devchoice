@@ -92,6 +92,7 @@ body {
   grid-template-columns: .1fr .1fr .1fr .1fr .1fr;
 }
 
+
 /* Screen larger than 600px? 2 column */
 @media (min-width: 600px) {
   .cards { grid-template-columns: repeat(2, 1fr); }
@@ -105,6 +106,21 @@ body {
 /* Screen larger than 1280px? 4 columns */
 @media (min-width: 1280px) {
   .cards { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* Screen larger than 1280px? 3 columns */
+@media (max-width: 1280px) {
+  .grid-container {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+
+  .winnerIcon img {
+    width: 30px;
+    border-radius: 15px;
+    margin: 0px 0px 0px 10px;
+    display: flex;
+    padding: 0px 10px 10px 0px;
+  }
 }
 
 .nomination{
