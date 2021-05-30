@@ -39,14 +39,19 @@ const Login = () => {
     return (
         <div className="App">
             <h1>Login</h1>
-            <div className="loginForm">
-                <h3>Dev Choice Login</h3>
+            <div className="loginForm part1">
                 <button onClick={signIn}>
                     <img src="images/google.png" className="loginG"/>
                     <span className="loginText">Sign in</span>
                 </button><br></br>
                 <div className="loginDevchoice">
                 </div>
+            </div><br></br>
+            <div loginForm part2>
+                <img src="images/onlineaward.jpg" className="loginAward"/>
+                <span className="loginbanner">
+                    <pre>Dev Choice Awards !</pre>
+                </span>
             </div>
         </div>
 
