@@ -32,8 +32,8 @@ body {
 }
 
 .column-1 {
-  flex-basis: 10%; /* sets initial width to 70% */
-  background-color:#3e71f0;
+  flex-basis: 10%; /* sets initial width to 70% , background-color:#3e71f0; */
+  background-color: #223054;
 }
 
 .column-2 {
@@ -194,8 +194,8 @@ p {
     display:flex;
 }
 .column-1 {
-  flex-basis: 10%; 
-  background-color:#3e71f0;
+  flex-basis: 10%;
+  background-color: #223054;
 }
 .column-2 {
   flex-basis: 90%; 
@@ -309,3 +309,32 @@ p {
 
 .profileImage:hover .dropdown-content {display: block;}
 
+
+
+
+.nominationsearch_Home {
+  width: 230px !important;
+  height: 30px;
+  margin: 0 auto;
+  position: relative;
+  background-color: #fff;
+  border: 1px solid #ededed;
+  width: 100%;
+  box-shadow: 0 5px 30px rgba(156,160,171,.25);
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+}
+
+.nominationsearch_Icon img{
+  height:30px;
+  width: 30px;
+  position: relative;
+  padding-bottom: 0px !important;
+  display :flex;
+}
+
+input {
+  margin: 0px 0px 0px 0px !important;
+  border-style: none;
+}

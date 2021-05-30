@@ -73,6 +73,8 @@ const useStyles = makeStyles(theme => ({
 const Dashboard = props => {
     const [nominationList, setNominationList] = useState([]);
     const [nominationCount, setNominationCount] = useState([]);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [searchResults, setSearchResults] = useState([]);
     const [teamwiseNomination, setTeamwiseNomination] = useState([]);
     const [dashboardView, setDashboardView] = useState([]);
     const [loginUserEmail, setLoginUserEmail] = useState("");
@@ -85,6 +87,11 @@ const Dashboard = props => {
 
     const isMounted = useRef(false);
     const history = useHistory();
+
+
+    const handleChange = event => {
+        setSearchTerm(event.target.value);
+    };
     
 
     useEffect(() => {
@@ -96,6 +103,13 @@ const Dashboard = props => {
      const userImage = window.localStorage.getItem("userImage");
      setImage(userImage);
     })
+
+    useEffect(() => {
+        const results = nominationList.filter(nomination =>
+            nomination.nomineename.toLowerCase().includes(searchTerm.toLowerCase()) || nomination.nomineename.toUpperCase().includes(searchTerm)
+        );
+        setSearchResults(results);
+    }, [searchTerm, nominationList]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -230,6 +244,14 @@ const Dashboard = props => {
                     </span>
                 </div>
             </div>
+            <label>
+                <div className="nominationsearch_Home">
+                    <div className="nominationsearch_Icon">
+                        <img alt="" src="/images/search.png"></img>
+                    </div>
+                    <input type="text" className="nomination_Home_Input" placeholder="search nominations..." value={searchTerm} onChange={handleChange} />
+                </div>
+            </label>
             <div className="container">
                 <div className="column-1 box">
                     <h3>Menu</h3>
@@ -249,7 +271,7 @@ const Dashboard = props => {
 
                         <div className="grid-container">
                             {
-                                nominationList.map(data => (
+                                searchResults.map(data => (
                                     <div key={data.id} className="nomination item grid-item">
                                         <div className="nominateIcon">
                                             <img src="/images/nominate_icon.PNG"></img>
@@ -272,7 +294,7 @@ const Dashboard = props => {
                     <div className="leveldown">
                         <div className="container">
                             <div className="space_1 tile">
-                                <h3>Previous Winners</h3>
+                                <h3>Nomination Winners</h3>
                                 {
                                     !displayWinner.length && (<div className="nonominationdata">No winners to display !</div>)
                                 }
