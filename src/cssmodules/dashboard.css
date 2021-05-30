@@ -61,7 +61,6 @@ body {
   flex-basis: 50%;
   padding: 10px;
   background-color: #223054;
-  height: 200px;
   overflow: hidden;
 }
 .space_1:hover {
@@ -79,13 +78,13 @@ body {
 }
 .menu{
   padding: 5px;
-  margin-left: 13px;
+  margin: 5px 10px 0px 10px;
   font-weight: 500;
   font-size: small;
 }
 
 .menu:hover {
-  background-color: #436acc;
+  background-color: #6b798a;
 }
 
 .grid-container {
@@ -337,4 +336,18 @@ p {
 input {
   margin: 0px 0px 0px 0px !important;
   border-style: none;
+}
+.makeStyles-submit-5 {
+  color: #FFF;
+  width: 50%;
+  border: 1px solid #16a085;
+  margin: 1em auto;
+  padding: 10px;
+  font-size: 18px;
+  background: #1abc9c;
+  font-style: normal;
+  text-align: center;
+  border-width: 1px 1px 3px;
+  border-radius: 5px;
+  margin-left: 90px !important;
 }

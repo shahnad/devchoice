@@ -108,6 +108,7 @@ const CreateLink = () => {
                 <div className="linkdetails nominationlink">
                     <pre>{tokenUrl}</pre>
                 </div>
+
                 }
                 <div className="errorDetails">
                        {errorDisplay}

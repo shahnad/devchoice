@@ -12,20 +12,24 @@
     background-color: #223054;
     margin: 0 auto;
 }
+
+.inputForm{
+    margin-top: 10px;
+}
 .inputField{
     height:70px;
 }
 
 .inputField input{
-    width : 80%;
+    width : 50%;
     height: 25px;
     margin: 10px 0px 10px 10px;
 }
 
 .inputField textarea{
-    width : 80%;
+    width : 50%;
     height: 70px;
-    margin: 0px 0px 30px 10px !important;
+    margin: 0px 0px 30px 0px !important;
 }
 .loginErrorTextFormat{
     color: rgb(187, 27, 152);
@@ -58,13 +62,13 @@ input {
     margin: 20px 0px 0px 0px;
 }
 
-.linkdetails {
-    width : 100%;
-    height: 40px;
-    margin: 20px 0px 0px 0px ;
-    background-color: rgb(234, 234, 250);
-    color: #4f36cf;
-    padding-top: 5px;
+.linkdetails pre {
+    width : 82%;
+    height: 10px;
+    margin: 20px 0px 0px 15px ;
+    background-color: rgb(95, 111, 153);
+    color: #e8eaed;
+    padding: 5px 70px 10px 0px;
     text-decoration: underline;
 }
 
