@@ -109,17 +109,57 @@ body {
 }
 
 /* Screen larger than 1280px? 3 columns */
-@media (max-width: 1280px) {
+@media (min-width: 1280px) {
   .grid-container {
     grid-template-columns: repeat(3, 1fr) !important;
   }
 
   .winnerIcon img {
-    width: 30px;
-    border-radius: 15px;
-    margin: 0px 0px 0px 10px;
+    width: 20px;
+    border-radius: 10px;
+    margin: 0px 0px 0px 10px !important;
     display: flex;
     padding: 0px 10px 10px 0px;
+  }
+  .oldwinner span{
+    height: 120px;
+    width: 90px !important;
+    color: #bcbdc2;
+    font-size: 1.1rem;
+    font-weight: medium;
+    margin: 10px 0px 0px 0px;
+    font-family: 'GT Flexa Variable', 'GT Flexa', sans-serif;
+  }
+  .winner .name{
+    padding-bottom: 10px;
+    margin: 0px 0px 0px 0px !important;
+    display: flex !important;
+  }
+  .winner .date{
+    padding-bottom: 10px;
+    margin: 0px 0px 0px 0px !important;
+    display: flex !important;
+  }
+
+  .count{
+    display: grid;
+    width: 70px !important;
+    background-color: rgba(209, 211, 216, 0.8);
+    margin: 5px 5px 15px 10px;
+    border-radius: 3px;
+    font-size: .8rem ;
+    font-family: 'GT Flexa Variable', 'GT Flexa', sans-serif;
+    text-align: center;
+  }
+
+  .badgenumber {
+    width :20px;
+    height: 20px;
+    border-radius: 10px;
+    float: right;
+    background-color: rgb(34, 121, 192);
+    margin: -10px 0px 0px 60px !important;
+    color: #cdd6da;
   }
 }
 

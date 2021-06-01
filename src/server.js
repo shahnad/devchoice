@@ -126,7 +126,7 @@ app.put('/service/createlink', async (req, res) => {
     const data = userEmail+tokenData;
     let buff = new Buffer(data);
     let base64data = buff.toString('base64');
-    let validUptoDate = moment().add(5,'minutes') //replace 2 with number of days you want to add .toDate() and convert it to a Javascript Date Object if you like
+    let validUptoDate = moment().add(60,'minutes') //replace 2 with number of days you want to add .toDate() and convert it to a Javascript Date Object if you like
     const tokenEmailRecord = await LinkTokenModel.count({ where: { email: userEmail } });
     if(tokenEmailRecord == 0){
       const linkTokenData = await LinkTokenModel.create({...req.body, email:userEmail, token:base64data, createdAt:currentDate, expiredAt:validUptoDate});  

@@ -96,3 +96,16 @@ input {
     white-space: pre;
     font-weight: smaller;
 }
+
+/* Screen larger than 1280px? 3 columns */
+@media (min-width: 1280px) {
+    .linkForm {
+        width: 45% !important;
+        height: 570px !important;
+        position: relative;
+        padding: 30px;
+        margin: 10px;
+        background-color: #223054;
+        margin: 0 auto;
+    }
+}
