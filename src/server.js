@@ -126,7 +126,7 @@ app.put('/service/createlink', async (req, res) => {
     const data = userEmail+tokenData;
     let buff = new Buffer(data);
     let base64data = buff.toString('base64');
-    let validUptoDate = moment().add(60,'minutes') //replace 2 with number of days you want to add .toDate() and convert it to a Javascript Date Object if you like
+    let validUptoDate = moment().add(2,'days') //replace 2 with number of days you want to add .toDate() and convert it to a Javascript Date Object if you like
     const tokenEmailRecord = await LinkTokenModel.count({ where: { email: userEmail } });
     if(tokenEmailRecord == 0){
       const linkTokenData = await LinkTokenModel.create({...req.body, email:userEmail, token:base64data, createdAt:currentDate, expiredAt:validUptoDate});  
@@ -198,6 +198,20 @@ app.get('/service/displaywinner', async (req, res) => {
     res.status(500).json({ fail: e.message });
   }
 });
+
+/* This service is used to group nomination based on name: */
+app.get('/service/nominationgroup', async (req, res) => {
+  try {
+    const nominationGroup = await NominationModel.findAll({
+      //group: ['nomineename'],
+      attributes: ['nomineename','nomineeteam','description','createdAt']
+    });
+    res.status(200).send(nominationGroup);
+  } catch (e) {
+    res.status(500).json({ fail: e.message });
+  }
+});
+
 
 (async () => {
   try {

@@ -49,17 +49,18 @@ body {
   background-color: #223054;
   padding: 10px 0px 0px 0px;
   margin-right: 15px;
-  height: 500px;
+  height: 530px;
   overflow: auto;
 }
 
 .leveldown{
   padding: 0px 0px 0px 0px;
+  
 }
 
 .space_1{
   flex-basis: 50%;
-  padding: 10px;
+  padding: 20px;
   background-color: #223054;
   overflow: hidden;
 }
@@ -68,8 +69,7 @@ body {
 }
 
 .tile {
- margin: 10px 15px 0px 0px;
- padding: 0px 0px 0px 0px;
+ margin: 10px 10px 0px 0px;
 }
 
 .navlist {
@@ -109,7 +109,7 @@ body {
 }
 
 /* Screen larger than 1280px? 3 columns */
-@media (min-width: 1280px) {
+@media (max-width: 1280px) {
   .grid-container {
     grid-template-columns: repeat(3, 1fr) !important;
   }
@@ -289,7 +289,7 @@ p {
 
 .team-1, .team-2, .team-3, .team-4{
   flex-basis: 90%;
-  width: 100px;
+  width: 80px;
   background-color: #edc524;
   margin: 0px 5px 20px 20px;
   overflow: auto;
@@ -297,7 +297,6 @@ p {
 
 .data-1{
   display: block;
-  vertical-align: text-top;
   margin-bottom: 5px;
   font-family: 'GT Flexa Variable', 'GT Flexa', sans-serif;
   font-size: .7rem ;
@@ -363,8 +362,6 @@ p {
 }
 
 .profileImage:hover .dropdown-content {display: block;}
-
-
 
 
 .nominationsearch_Home {

@@ -1,0 +1,61 @@
+
+
+#main-content {
+    background-color: rgb(95, 111, 153);
+    word-wrap: break-word;
+}
+
+#sidebar-left {
+    background-color: #e3e9ee;
+
+}
+
+#sidebar-right {
+    background-color: #dbe1e6;
+}
+
+/*Base Mobile Layout*/
+.wrap {
+    width: 100%;
+    display: flex;
+    border:solid 1px;
+}
+
+#main-content, #sidebar-left, #sidebar-right {
+    width: 100%;
+    float: left;
+}
+.nomlistdata{
+    display:flex;
+    padding-left: 10px;
+}
+/*3 Column Layout*/
+@media only screen and (min-width: 1024px) {
+    .wrap {
+        width: 1200px;
+    }
+
+    #main-content {
+        width: 65%;
+        float: left;
+    }
+
+    #sidebar-left {
+        width: 20%;
+        float: left;
+    }
+
+    #sidebar-right {
+        width: 15%;
+        float: left;
+    }
+}
+
+/*Wide Layout*/
+@media only screen and (min-width: 1200px) {
+    .wrap {
+        width: 80%;
+        margin: 0 auto;
+    }
+}
+

@@ -4,11 +4,13 @@ import "./cssmodules/createLink.css";
 import "./cssmodules/errorPage.css";
 import "./cssmodules/nominate.css";
 import "./cssmodules/login.css";
+import "./cssmodules/nominationList.css";
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import Dashboard from "./components/dashboard";
 import CreateLink from "./components/createLink";
 import Nominate from "./components/nominate";
 import Login from "./components/login";
+import NominationList from "./components/nominationList";
 import { ProtectedRoute } from "./components/protectedRoute";
 import ErrorPage from "./components/errorPage";
 import PageNotFound from "./components/pageNotFound";
@@ -20,6 +22,7 @@ function App() {
           <Switch>
               <ProtectedRoute exact path='/dashboard' component={Dashboard} />
               <ProtectedRoute exact path='/createLink' component={CreateLink} />
+              <ProtectedRoute exact path='/nominationList' component={NominationList} />
               <Route exact path='/' component={Login} />
               <Route path='/nominate/:token' component={Nominate} />
               <Route path='/errorPage/' component={ErrorPage} />

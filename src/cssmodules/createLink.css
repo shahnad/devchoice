@@ -4,7 +4,7 @@
     margin-bottom: 10px;
 }
 .linkForm {
-    width: 30% !important;
+    width: 20% !important;
     height: 600px !important;
     position: relative;
     padding: 30px;
@@ -65,11 +65,13 @@ input {
 .linkdetails pre {
     width : 82%;
     height: 10px;
-    margin: 20px 0px 0px 15px ;
+    margin: 20px 0px 0px 10px ;
     background-color: rgb(95, 111, 153);
     color: #e8eaed;
     padding: 5px 70px 10px 0px;
     text-decoration: underline;
+    word-break: break-all;
+    display: inline-block;
 }
 
 .nominatedby{
@@ -100,7 +102,7 @@ input {
 /* Screen larger than 1280px? 3 columns */
 @media (min-width: 1280px) {
     .linkForm {
-        width: 45% !important;
+        width: 30% !important;
         height: 570px !important;
         position: relative;
         padding: 30px;

@@ -259,7 +259,7 @@ const Dashboard = props => {
                         <span className="menuitem link" onClick={() => history.push('/createLink') }>Create Link</span>
                     </div>
                     <div className="navlist menu">
-                        <span className="menuitem link"></span>
+                        <span className="menuitem link" onClick={() => history.push('/nominationList') }>Nomination List</span>
                     </div>
                 </div>
                 <div className="column-2 box">
