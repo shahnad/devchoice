@@ -15,11 +15,22 @@ const NominationList = () => {
     }, []);
 
     useEffect(() => {
+        let newGroup = {};
         const fetchData = async () => {
             try {
                 const res = await Axios.get('http://localhost:8000/service/nominationgroup');
                 if (isMounted.current) {
-                    setNominationGroup(res.data);
+                    for (const elem of res.data){
+                        if (!newGroup.hasOwnProperty(elem.nomineename)){
+                            newGroup[elem.nomineename] = {
+                                createdAt: "",
+                                description: []
+                            };
+                        }
+                        newGroup[elem.nomineename].description.push(elem.description);
+                        newGroup[elem.nomineename].createdAt = elem.createdAt;
+                    }
+                    setNominationGroup(newGroup);
                     console.log("Nomination data from server :" + res.data);
                 }
             } catch (e) {
@@ -51,11 +62,16 @@ const NominationList = () => {
 
                 Object.keys(nominationGroup).map(nomineename  =>(
                 <div className="wrap">
-                            <div key={nominationGroup[nomineename].nomineename} id="sidebar-left">
-                                {nominationGroup[nomineename].nomineename}
+                            <div key={nomineename} id="sidebar-left">
+                                {nomineename}
                             </div>
                             <div id="main-content">
-                                <li key={nominationGroup[nomineename].description} className="nomlistdata"><li>{nominationGroup[nomineename].description}</li></li>
+
+                                {
+                                    nominationGroup[nomineename].description.map(desc => (
+                                        <li key={desc} className="nomlistdata"><li>{desc}</li></li>
+                                    ))
+                                }
                             </div>
                             <div key={nominationGroup[nomineename].createdAt} id="sidebar-right">
                                 {moment(nominationGroup[nomineename].createdAt).format('DD-MMM-YYYY')}

@@ -1,17 +1,24 @@
 
 
 #main-content {
-    background-color: rgb(95, 111, 153);
+    background-color: rgb(34, 48, 84);
     word-wrap: break-word;
+    color: rgb(234, 234, 250);
 }
 
 #sidebar-left {
     background-color: #e3e9ee;
-
 }
 
 #sidebar-right {
     background-color: #dbe1e6;
+}
+
+#main-content th{
+    display: table-cell;
+    text-align: center !important;
+    position: absolute;
+    margin-left: 20%;
 }
 
 /*Base Mobile Layout*/
@@ -19,6 +26,7 @@
     width: 100%;
     display: flex;
     border:solid 1px;
+    border-color: #cfcf4e;
 }
 
 #main-content, #sidebar-left, #sidebar-right {
