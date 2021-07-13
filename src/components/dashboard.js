@@ -1,9 +1,9 @@
 import React, { useRef, useEffect, useState } from "react";
 import Axios from "axios";
-import {Link, useHistory} from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import Modal from "@material-ui/core/Modal";
 import { makeStyles } from "@material-ui/core/styles";
-import { useGoogleLogout  } from 'react-google-login';
+import { useGoogleLogout } from 'react-google-login';
 const moment = require('moment');
 
 const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
@@ -54,14 +54,14 @@ const useStyles = makeStyles(theme => ({
         borderWidth: "1px 1px 3px",
         marginBottom: "10px",
         padding: "10px",
-        marginLeft:"90px",
-        borderRadius:"5px"
+        marginLeft: "90px",
+        borderRadius: "5px"
     },
     label: {
         color: "#161717",
         textAlign: "center",
         fontSize: "18px",
-        paddingLeft:"35px"
+        paddingLeft: "35px"
     },
     p: {
         color: "#161717",
@@ -92,16 +92,16 @@ const Dashboard = props => {
     const handleChange = event => {
         setSearchTerm(event.target.value);
     };
-    
+
 
     useEffect(() => {
         isMounted.current = true;
         return () => isMounted.current = false;
     }, []);
 
-    useEffect(() =>{
-     const userImage = window.localStorage.getItem("userImage");
-     setImage(userImage);
+    useEffect(() => {
+        const userImage = window.localStorage.getItem("userImage");
+        setImage(userImage);
     })
 
     useEffect(() => {
@@ -179,7 +179,7 @@ const Dashboard = props => {
         const fetchData = async () => {
             const email = localStorage.getItem("loginEmail");
             try {
-                const res = await Axios.get('http://localhost:8000/service/dashboardview', {email});
+                const res = await Axios.get('http://localhost:8000/service/dashboardview', { email });
                 if (isMounted.current) {
                     setDashboardView(res.data);
                     setLoginUserEmail(email);
@@ -192,12 +192,12 @@ const Dashboard = props => {
         fetchData();
     }, []);
 
-    const confirmWinner = () =>{
+    const confirmWinner = () => {
         const fetchData = async () => {
             const email = emailText;
             const name = nameText;
             try {
-                const res = await Axios.post('http://localhost:8000/service/confirmwinner', {email, name});
+                const res = await Axios.post('http://localhost:8000/service/confirmwinner', { email, name });
                 if (isMounted.current) {
                     console.log("Send winner data:" + res.data);
                 }
@@ -218,7 +218,7 @@ const Dashboard = props => {
     const onFailure = () => {
         console.log("Handle failure cases !")
     }
-    const { signOut } = useGoogleLogout ({
+    const { signOut } = useGoogleLogout({
         clientId,
         onLogoutSuccess,
         onFailure
@@ -230,6 +230,7 @@ const Dashboard = props => {
         return teams;
     }, {});
 
+
     return (
         <div className="App">
             <div className="navbar-nav">
@@ -238,7 +239,7 @@ const Dashboard = props => {
                     <a><Link to={'/createLink'} className="nav-link"> <b>Create Link</b> </Link></a>
                 </div>
                 <div className="profileImage">
-                        <img src={image}></img>
+                    <img src={image}></img>
                     <span className="dropdown-content">
                         <a href="" onClick={signOut}>Log out</a>
                     </span>
@@ -256,10 +257,16 @@ const Dashboard = props => {
                 <div className="column-1 box">
                     <h3>Menu</h3>
                     <div className="navlist menu">
-                        <span className="menuitem link" onClick={() => history.push('/createLink') }>Create Link</span>
+                        <span className="menuitem link" onClick={() => history.push('/createLink')}>Create Link</span>
                     </div>
                     <div className="navlist menu">
-                        <span className="menuitem link" onClick={() => history.push('/nominationList') }>Nomination List</span>
+                        <span className="menuitem link" onClick={() => history.push('/nominationList')}>Nomination List</span>
+                    </div>
+                    <div className="navlist menu">
+                        <span className="menuitem link" onClick={() => history.push('/manageNominees')}>Manage Nominees</span>
+                    </div>
+                    <div className="navlist menu">
+                        <span className="menuitem link" onClick={() => history.push('/nominatePerson')}>Nominate Person</span>
                     </div>
                 </div>
                 <div className="column-2 box">
@@ -300,13 +307,13 @@ const Dashboard = props => {
                                 }
                                 {
                                     displayWinner.sort((a, b) => moment(b.createdAt) - moment(a.createdAt)).map(data => (
-                                    <div key={data.id}className="oldwinner">
-                                        <div className="winnerIcon">
-                                            <img src="/images/trophy1.png"></img>
-                                            <span key={data.winner} className="winner name">{data.winner}</span>
-                                            <span key={data.createdAt} className="winner date">{moment(data.createdAt).format('DD-MMM-YYYY')}</span>
+                                        <div key={data.id} className="oldwinner">
+                                            <div className="winnerIcon">
+                                                <img src="/images/trophy1.png"></img>
+                                                <span key={data.winner} className="winner name">{data.winner}</span>
+                                                <span key={data.createdAt} className="winner date">{moment(data.createdAt).format('DD-MMM-YYYY')}</span>
+                                            </div>
                                         </div>
-                                    </div>
                                     ))
                                 }
                             </div>
@@ -317,17 +324,17 @@ const Dashboard = props => {
                                 }
                                 <div className="grid-container">
 
-                                {
-                                    nominationCount.map(data => (
-                                        <div key={data.id}>
-                                            <div onClick={() => {setOpen(!open); setEmailText(data.email); setNameText(data.nomineename)}} className="count badge" >
-                                                <span className="badgenumber" value={data.count} key={data.count}>{data.EmailCount}</span>
-                                                <span className="countname" key={data.nomineename}  onClick={()=>setNameText(data.nomineename)}>{data.nomineename}</span>
-                                                <span hidden={true} key={data.email}>{data.email}</span>
+                                    {
+                                        nominationCount.map(data => (
+                                            <div key={data.id}>
+                                                <div onClick={() => { setOpen(!open); setEmailText(data.email); setNameText(data.nomineename) }} className="count badge" >
+                                                    <span className="badgenumber" value={data.count} key={data.count}>{data.EmailCount}</span>
+                                                    <span className="countname" key={data.nomineename} onClick={() => setNameText(data.nomineename)}>{data.nomineename}</span>
+                                                    <span hidden={true} key={data.email}>{data.email}</span>
+                                                </div>
                                             </div>
-                                        </div>
-                                    ))
-                                }
+                                        ))
+                                    }
                                 </div>
                             </div>
                             <div className="space_1 tile">
@@ -335,15 +342,15 @@ const Dashboard = props => {
                                 <div className="grid-container">
                                     {
                                         Object.entries(teams).map(([team, names]) => (
-                                        <div key={team} className="team-1">
-                                            <h5>{team}</h5>
-                                            {names.map((name) => (
-                                                <span key={name} className="data-1">
-                                                    {name}
-                                                </span>
-                                            ))}
-                                        </div>
-                                    ))
+                                            <div key={team} className="team-1">
+                                                <h5>{team}</h5>
+                                                {names.map((name) => (
+                                                    <span key={name} className="data-1">
+                                                        {name}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        ))
                                     }
                                 </div>
                             </div>

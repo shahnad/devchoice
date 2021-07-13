@@ -43,7 +43,7 @@ const Login = () => {
                 <button onClick={signIn}>
                     <img src="images/google.png" className="loginG"/>
                     <span className="loginText">Sign in</span>
-                </button><br></br>
+                </button><br></br><br></br>
                 <div className="loginDevchoice">
                 </div>
             </div><br></br>

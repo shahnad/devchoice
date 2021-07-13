@@ -10,6 +10,8 @@ const axios = require('axios');
 const path = require('path');
 const cors = require("cors");
 const { get } = require('http');
+const mattermost_token = process.env.REACT_APP_MATTERMOST_TOKEN;
+const channel_Id = process.env.REACT_APP_MATTERMOST_CHANNEL_ID;
 
 
 let currentDate = moment().format('YYYY-MM-DD hh:mm');
@@ -60,19 +62,19 @@ app.post('/service/nominateperson', async (req, res) => {
     const nomineeTeam = req.body.nomineeteam;
     const description = req.body.description;
     const nominatedBy = req.body.nominatedby;
-    var data = {nomineename:nomineeName, email:nomineeEmail, nomineeteam:nomineeTeam, description:description, nominatedby:nominatedBy};
+    var data = { nomineename: nomineeName, email: nomineeEmail, nomineeteam: nomineeTeam, description: description, nominatedby: nominatedBy };
     console.log("Server side display nominations :" + data);
-    const checkTokenData = await LinkTokenModel.findAll({ attributes: ['token','expiredAt']});
+    const checkTokenData = await LinkTokenModel.findAll({ attributes: ['token', 'expiredAt'] });
     const expiryDate = checkTokenData[0].expiredAt;
     const formattedExpiryDate = moment(expiryDate).format('YYYY-MM-DD hh:mm');
     const tokenData = checkTokenData[0].token;
     var now = moment();
     var currentDate = moment(now).format('YYYY-MM-DD hh:mm');
-    if(currentDate < formattedExpiryDate ){
+    if (currentDate < formattedExpiryDate) {
       const nominationData = await NominationModel.create(data);
-      res.status(200).json({message: "Nomination send successfully !"});
+      res.status(200).json({ message: "Nomination send successfully !" });
     } else {
-      res.status(404).json({ fail:true});
+      res.status(404).json({ fail: true });
     }
   } catch (e) {
     res.status(500).json({ fail: e.message });
@@ -83,8 +85,8 @@ app.post('/service/nominateperson', async (req, res) => {
 /* This service is used to display list of all nominations in the Dashboard under Recent nominations section: */
 app.get('/service/nominations', async (req, res) => {
   try {
-      const nominationData = await NominationModel.findAll({ attributes: ['email','nomineename', 'nomineeteam','description', 'nominatedby']});
-      res.status(200).send(nominationData);
+    const nominationData = await NominationModel.findAll({ attributes: ['email', 'nomineename', 'nomineeteam', 'description', 'nominatedby', 'createdAt'] });
+    res.status(200).send(nominationData);
   } catch (e) {
     res.status(500).json({ fail: e.message });
   }
@@ -94,11 +96,11 @@ app.get('/service/nominations', async (req, res) => {
 /* This service is used to display the count of nominations received for a nominee in the Dashboard under Nominations count section: */
 app.get('/service/nominationcount', async (req, res) => {
   try {
-     const data = await NominationModel.findAll({
-          group: ['email'],
-          attributes: ['email', 'nomineename', [sequelize.fn('COUNT', 'email'), 'EmailCount']],
-      });
-      res.status(200).send(data);
+    const data = await NominationModel.findAll({
+      group: ['email'],
+      attributes: ['email', 'nomineename', [sequelize.fn('COUNT', 'email'), 'EmailCount']],
+    });
+    res.status(200).send(data);
   } catch (e) {
     res.status(500).json({ fail: e.message });
   }
@@ -123,16 +125,16 @@ app.put('/service/createlink', async (req, res) => {
   try {
     const userEmail = req.body.email;
     const tokenData = req.body.token;
-    const data = userEmail+tokenData;
+    const data = userEmail + tokenData;
     let buff = new Buffer(data);
     let base64data = buff.toString('base64');
-    let validUptoDate = moment().add(2,'days') //replace 2 with number of days you want to add .toDate() and convert it to a Javascript Date Object if you like
+    let validUptoDate = moment().add(2, 'days') //replace 2 with number of days you want to add .toDate() and convert it to a Javascript Date Object if you like
     const tokenEmailRecord = await LinkTokenModel.count({ where: { email: userEmail } });
-    if(tokenEmailRecord == 0){
-      const linkTokenData = await LinkTokenModel.create({...req.body, email:userEmail, token:base64data, createdAt:currentDate, expiredAt:validUptoDate});  
+    if (tokenEmailRecord == 0) {
+      const linkTokenData = await LinkTokenModel.create({ ...req.body, email: userEmail, token: base64data, createdAt: currentDate, expiredAt: validUptoDate });
       res.status(200).json({ message: "Token created successfully !" });
     } else {
-      const linkTokenData = await LinkTokenModel.update({...req.body, email:userEmail, token:base64data, createdAt:currentDate, expiredAt:validUptoDate},{where: { email: userEmail }});
+      const linkTokenData = await LinkTokenModel.update({ ...req.body, email: userEmail, token: base64data, createdAt: currentDate, expiredAt: validUptoDate }, { where: { email: userEmail } });
       res.status(200).json({ message: "Token updated successfully !" });
     }
   } catch (e) {
@@ -145,15 +147,15 @@ app.put('/service/createlink', async (req, res) => {
 app.post('/service/validatelink', async (req, res) => {
   try {
     const userEmail = req.params.email;
-    const data = await LinkTokenModel.findAll({ attributes: ['token','expiredAt']}, {where: { email: userEmail }});
+    const data = await LinkTokenModel.findAll({ attributes: ['token', 'expiredAt'] }, { where: { email: userEmail } });
     const expiryDate = data[0].expiredAt;
     const formattedExpiryDate = moment(expiryDate).format('YYYY-MM-DD hh:mm');
     const tokenData = data[0].token;
-    console.log("Get expiry date from table: "+formattedExpiryDate);
-    var now = moment(); 
+    console.log("Get expiry date from table: " + formattedExpiryDate);
+    var now = moment();
     var currentDate = moment(now).format('YYYY-MM-DD hh:mm');
-    console.log("Get current date: "+currentDate);
-    if(currentDate < formattedExpiryDate ){
+    console.log("Get current date: " + currentDate);
+    if (currentDate < formattedExpiryDate) {
       let tokendata = tokenData;
       res.status(200).send(tokendata);
     } else {
@@ -168,7 +170,7 @@ app.post('/service/validatelink', async (req, res) => {
 app.get('/service/dashboardview', async (req, res) => {
   try {
     const userEmail = req.body.email;
-    const dashboardData = await LinkTokenModel.findAll({ attributes: ['email','token']}, {where: { email: userEmail }});
+    const dashboardData = await LinkTokenModel.findAll({ attributes: ['email', 'token'] }, { where: { email: userEmail } });
     res.status(200).send(dashboardData);
   } catch (e) {
     res.status(500).json({ fail: e.message });
@@ -180,7 +182,7 @@ app.post('/service/confirmwinner', async (req, res) => {
   try {
     const winnerEmail = req.body.email;
     const winnerName = req.body.name;
-    var data = {email:winnerEmail, winner:winnerName};
+    var data = { email: winnerEmail, winner: winnerName };
     const winnerData = await NominationWinnerModel.create(data);
     res.status(200).send(winnerData);
   } catch (e) {
@@ -192,7 +194,7 @@ app.post('/service/confirmwinner', async (req, res) => {
 app.get('/service/displaywinner', async (req, res) => {
   try {
     const winnerEmail = req.body.email;
-    const data = await NominationWinnerModel.findAll({ attributes: ['winner', 'createdAt']}, {where: { email: winnerEmail }});
+    const data = await NominationWinnerModel.findAll({ attributes: ['winner', 'createdAt'] }, { where: { email: winnerEmail } });
     res.status(200).send(data);
   } catch (e) {
     res.status(500).json({ fail: e.message });
@@ -204,9 +206,30 @@ app.get('/service/nominationgroup', async (req, res) => {
   try {
     const nominationGroup = await NominationModel.findAll({
       //group: ['nomineename'],
-      attributes: ['nomineename','nomineeteam','description','createdAt']
+      attributes: ['nomineename', 'nomineeteam', 'description', 'createdAt']
     });
     res.status(200).send(nominationGroup);
+  } catch (e) {
+    res.status(500).json({ fail: e.message });
+  }
+});
+
+/* This service is used to publish a winner to the mattermost site: */
+app.post('/service/publishwinner', async (req, res) => {
+  try {
+    const winnerName = req.body.winnerName;
+    const winnerDetails = req.body.winnerDetails;
+    const mattermosttoken = mattermost_token;
+    const res = await axios.post('https://vinod.cloud.mattermost.com/api/v4/posts', {
+      "channel_id": channel_Id,
+      "message": `Congratulations...! ${winnerName} ${winnerDetails} ...!
+      ![image](https://i.picsum.photos/id/452/4096/2722.jpg?hmac=VFr5l8FshPX1LW4DCpHm99QQgWMsHW5Lr70-6ZQZuFg)`,
+    }, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${mattermosttoken}`,
+      },
+    });
   } catch (e) {
     res.status(500).json({ fail: e.message });
   }

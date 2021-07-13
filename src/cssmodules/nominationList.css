@@ -65,5 +65,54 @@
         width: 80%;
         margin: 0 auto;
     }
+
+    .makeStyles-form-3 {
+        width: 80% !important;
+        height: 27% !important;
+        color: #FFF !important;
+        border: 1px solid #16a085;
+        background: #223054 !important;
+        margin: 1em auto;
+        padding: 10px;
+        font-size: 18px;
+        font-style: normal;
+        text-align: center;
+        border-width: 1px 1px 3px;
+        border-radius: 5px;
+    }
+    .inputField textarea{
+        width: 90% !important;
+        margin-bottom: 10px !important;
+    }
+    .publishbtn{
+        margin: 10px !important;
+        background: #1abc9c;
+        width: 100px;
+        height: 50px;
+        color: #FFF;
+    }
+
+    .makeStyles-submit-5 {
+        color: #FFF;
+        width: 50%;
+        border: 1px solid #16a085;
+        margin: 1em auto;
+        padding: 10px;
+        font-size: 18px;
+        background: #1abc9c;
+        font-style: normal;
+        text-align: center;
+        border-width: 1px 1px 3px;
+        border-radius: 5px;
+        margin : 50px !important;
+        
+      }
+
+      .makeStyles-label-6{
+        color: #FFF;
+      }
 }
 
+.makeStyles-label-6{
+    color: #FFF !important;
+  }
