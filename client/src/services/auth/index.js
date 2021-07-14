@@ -14,20 +14,7 @@ export const UserLogin = (payload) => {
                     severity: 'success'
                 }
             }))
-          
-        // else {
-        //     dispatch(LoginFails())
-        //     dispatch(OpenNotification({
-        //         isOpen: true,
-        //         snackMessage: {
-        //             message: 'Incorrect Login Id or Password',
-        //             severity: 'error'
-        //         }
-        //     }))
-
-        // }
-
-    };
+        };
 };
 
 export const UserLogout = () => {
@@ -42,5 +29,6 @@ export const UserLogout = () => {
                     severity: 'success'
                 }
             }))
+
     }
 }

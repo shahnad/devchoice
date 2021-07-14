@@ -217,7 +217,7 @@ export default function Appbar(props) {
           </ListItemIcon>
           <ListItemText primary="Profile" />
             </StyledMenuItem>
-            {/* {localStorage.clear(); history.push('/auth/login')} */}
+            
             <StyledMenuItem onClick={() => { dispatch(UserLogout()); history.push('/auth/login')}}>
           <ListItemIcon>
             <LockIcon fontSize="small" />
@@ -325,12 +325,6 @@ export default function Appbar(props) {
                 }}
                 open={open}>
                 <div className={classes.toolbarIcon}>
-                    <Avatar
-                        variant="square"
-                        alt="logo"
-                        src="https://www.zappfresh.com/images/self/zappfresh-logo.png"
-                        className={classes.logo}
-                       />
                     <IconButton onClick={handleDrawerClose}>
                         <ChevronLeftIcon />
                     </IconButton>

@@ -3,16 +3,8 @@ import { ListItem, Collapse, List, makeStyles, MenuList } from '@material-ui/cor
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import DashboardIcon from '@material-ui/icons/Dashboard';
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
-import PeopleIcon from '@material-ui/icons/People';
-import BarChartIcon from '@material-ui/icons/BarChart';
-import StoreIcon from '@material-ui/icons/Store';
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import ExpandMore from '@material-ui/icons/ExpandMore';
-import CategoryIcon from '@material-ui/icons/Category';
-import ListIcon from '@material-ui/icons/List';
 import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
-import ReorderIcon from '@material-ui/icons/Reorder';
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -66,44 +58,14 @@ const MainListItems = (props) => {
         </ListItemIcon>
         <ListItemText primary="Dashboard" />
       </ListItem>
-      <ListItem button onClick={handleClick}>
+      <ListItem button  
+        onClick={() => SelectPath('/dashboard/nominations')} >
         <ListItemIcon>
-          <StoreIcon />
+          <SupervisorAccountIcon />
         </ListItemIcon>
-        <ListItemText primary="Hubs" />
-        {open ? <ExpandLess /> : <ExpandMore />}
+        <ListItemText primary="Nomination List" />
       </ListItem>
-      <Collapse in={open} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
-          <ListItem button className={classes.nested}
-            onClick={() => SelectPath('/dashboard/hubs')}>
-            <ListItemIcon>
-              <SupervisorAccountIcon />
-            </ListItemIcon>
-            <ListItemText primary="Hub list" />
-          </ListItem>
-          <ListItem button className={classes.nested}
-            onClick={() => SelectPath('/dashboard/users')}>
-            <ListItemIcon>
-              <ListIcon />
-            </ListItemIcon>
-            <ListItemText primary="Users list" />
-          </ListItem>
-          <ListItem button className={classes.nested}
-            onClick={() => SelectPath('/dashboard/orders')}>
-            <ListItemIcon>
-              <ReorderIcon />
-            </ListItemIcon>
-            <ListItemText primary="Order list" />
-          </ListItem>
-        </List>
-      </Collapse>
-      <ListItem button >
-        <ListItemIcon>
-          <ShoppingCartIcon />
-        </ListItemIcon>
-        <ListItemText primary="Admin" />
-      </ListItem>
+     
      </div>
   )
 }

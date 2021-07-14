@@ -14,7 +14,8 @@ import {
 import { useGoogleLogin } from 'react-google-login';
 import { refreshToken } from '../../utils/refreshToken';
 import { useLocation } from 'react-router-dom';
-
+import { useDispatch } from 'react-redux'
+import { CloseNotification, OpenNotification } from '../../redux/action/NotifyAction';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -100,27 +101,42 @@ export default function SignIn(props) {
   const [success, setSuccess] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
-
+  const dispatch = useDispatch()
   const [userEmail, setUserEmail] = React.useState("");
 
   const { state: { toLocation = "/dashboard" } = {} } = useLocation();
 
   const onSuccess = (res) => {
-    console.log("Login successfully", res.profileObj);
+
     const email = res.profileObj.email;
     const image = res.profileObj.imageUrl;
     setUserEmail(email);
     window.localStorage.setItem("loginEmail", email);
     window.localStorage.setItem("userImage", image);
     refreshToken(res);
-    history.replace(toLocation);
+    dispatch(OpenNotification({
+      isOpen: true,
+      snackMessage: {
+        message: 'Logged in Successfully',
+        severity: 'success'
+      }
+    }))
+actions.UserLogin(res)
+    history.push('/dashboard')
+
+    dispatch(CloseNotification())
   }
   const onFailure = (res) => {
-    console.log('Login failed: res:', res);
-    alert(
-      `Failed to login !`
-    );
+    dispatch(OpenNotification({
+      isOpen: true,
+      snackMessage: {
+        message: 'Something went wrong',
+        severity: 'error'
+      }
+    }))
   };
+
+
   const { signIn } = useGoogleLogin({
     onSuccess,
     onFailure,
