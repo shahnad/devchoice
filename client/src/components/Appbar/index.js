@@ -22,11 +22,12 @@ import MailIcon from '@material-ui/icons/Mail';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import MainListItems from '../SideBar';
 import { useDispatch } from 'react-redux';
-import {UserLogout} from '../../services/auth'
+import { UserLogout } from '../../services/auth'
 import { useHistory } from 'react-router-dom';
 import LockIcon from '@material-ui/icons/Lock';
 import NotificationPopups from '../../container/dashboard/components/Notification';
 import MessagePopups from '../Messages';
+import { useGoogleLogout } from 'react-google-login';
 
 const drawerWidth = 240;
 
@@ -127,38 +128,38 @@ const useStyles = makeStyles((theme) => ({
         width: 140,
         height: 40,
         '& .MuiAvatar-img': {
-            objectFit:'contain'
+            objectFit: 'contain'
         }
     }
 }));
 
 const StyledMenu = withStyles({
-  paper: {
+    paper: {
         border: '1px solid #d3d4d5',
         margin: 2,
-       width:300
-  },
+        width: 300
+    },
 })((props) => (
-  <Menu
-    elevation={0}
-    getContentAnchorEl={null}
-    anchorOrigin={{
-      vertical: 'bottom',
-      horizontal: 'center',
-    }}
-    transformOrigin={{
-      vertical: 'top',
-      horizontal: 'center',
-    }}
-    {...props}
-  />
+    <Menu
+        elevation={0}
+        getContentAnchorEl={null}
+        anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'center',
+        }}
+        transformOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
+        }}
+        {...props}
+    />
 ));
 
 const StyledMenuItem = withStyles((theme) => ({
-  root: {
-      color:'black',
+    root: {
+        color: 'black',
         marginTop: 2,
-       '&:focus': {
+        '&:focus': {
             backgroundColor: theme.palette.primary.main,
             '& .MuiListItemIcon-root, & .MuiListItemText-primary': {
                 color: theme.palette.common.white,
@@ -169,11 +170,11 @@ const StyledMenuItem = withStyles((theme) => ({
                 }
             }
         },
-  },
+    },
 }))(MenuItem);
 
 export default function Appbar(props) {
- 
+
     let history = useHistory()
     const dispatch = useDispatch()
     const classes = useStyles();
@@ -182,6 +183,7 @@ export default function Appbar(props) {
     const isMenuOpen = Boolean(anchorEl);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+    const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -202,29 +204,48 @@ export default function Appbar(props) {
     const handleMobileMenuOpen = (event) => {
         setMobileMoreAnchorEl(event.currentTarget);
     };
+
+    const onLogoutSuccess = (res) => {
+        localStorage.removeItem("loginEmail");
+        localStorage.removeItem("userImage");
+        history.push('/auth/login')
+        console.log("Logged out successfully !");
+    }
+
+    const onFailure = () => {
+        console.log("Handle failure cases !")
+        
+    }
+
+
+    const { signOut } = useGoogleLogout({
+        clientId,
+        onLogoutSuccess,
+        onFailure
+    })
     const menuId = 'primary-search-account-menu';
     const renderMenu = (
-       <StyledMenu
-        id="customized-menu"
-        anchorEl={anchorEl}
-        keepMounted
-        open={Boolean(anchorEl)}
-        onClose={handleMenuClose}
-      >
-        <StyledMenuItem>
-          <ListItemIcon>
-            <AccountCircle fontSize="small" />
-          </ListItemIcon>
-          <ListItemText primary="Profile" />
+        <StyledMenu
+            id="customized-menu"
+            anchorEl={anchorEl}
+            keepMounted
+            open={Boolean(anchorEl)}
+            onClose={handleMenuClose}
+        >
+            <StyledMenuItem>
+                <ListItemIcon>
+                    <AccountCircle fontSize="small" />
+                </ListItemIcon>
+                <ListItemText primary="Profile" />
             </StyledMenuItem>
-            
-            <StyledMenuItem onClick={() => { dispatch(UserLogout()); history.push('/auth/login')}}>
-          <ListItemIcon>
-            <LockIcon fontSize="small" />
-          </ListItemIcon>
-          <ListItemText primary="Logout" />
-        </StyledMenuItem>
-       </StyledMenu>
+
+            <StyledMenuItem onClick={signOut}>
+                <ListItemIcon>
+                    <LockIcon fontSize="small" />
+                </ListItemIcon>
+                <ListItemText primary="Logout" />
+            </StyledMenuItem>
+        </StyledMenu>
     );
     const mobileMenuId = 'primary-search-account-menu-mobile';
     const renderMobileMenu = (
@@ -236,7 +257,7 @@ export default function Appbar(props) {
             transformOrigin={{ vertical: 'top', horizontal: 'right' }}
             open={isMobileMenuOpen}
             onClose={handleMobileMenuClose}>
-            <MenuItem onClick={()=>history.push('/dashboard/messages')}>
+            <MenuItem onClick={() => history.push('/dashboard/messages')}>
                 <IconButton aria-label="show 4 new mails" color="inherit">
                     <Badge badgeContent={4} color="secondary">
                         <MailIcon />
@@ -244,7 +265,7 @@ export default function Appbar(props) {
                 </IconButton>
                 <p>Messages</p>
             </MenuItem>
-            <MenuItem onClick={()=>history.push('/dashboard/notifications')}>
+            <MenuItem onClick={() => history.push('/dashboard/notifications')}>
                 <IconButton aria-label="show 11 new notifications" color="inherit">
                     <Badge badgeContent={11} color="secondary">
                         <NotificationsIcon />
@@ -271,7 +292,7 @@ export default function Appbar(props) {
             <AppBar position="absolute"
                 className={clsx(classes.appBar, open && classes.appBarShift)}>
                 <Toolbar className={classes.toolbar}>
-                  <IconButton
+                    <IconButton
                         edge="start"
                         color="inherit"
                         aria-label="open drawer"
@@ -286,11 +307,11 @@ export default function Appbar(props) {
                         color="inherit"
                         noWrap className={classes.title}>
                         Dashboard
-                       </Typography>
+                    </Typography>
                     <div className={classes.grow} />
                     <div className={classes.sectionDesktop}>
                         <MessagePopups {...props} history={history} />
-                           <NotificationPopups {...props}  history={history} />
+                        <NotificationPopups {...props} history={history} />
                         <IconButton
                             edge="end"
                             aria-label="account of current user"
@@ -330,8 +351,8 @@ export default function Appbar(props) {
                     </IconButton>
                 </div>
                 <Divider />
-                <List >< MainListItems history={history}/></List>
-           </Drawer>
-      </div>
+                <List >< MainListItems history={history} /></List>
+            </Drawer>
+        </div>
     );
 }
