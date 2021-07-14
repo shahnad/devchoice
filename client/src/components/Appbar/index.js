@@ -306,7 +306,7 @@ export default function Appbar(props) {
                         variant="h6"
                         color="inherit"
                         noWrap className={classes.title}>
-                        Dashboard
+                       DevChoice
                     </Typography>
                     <div className={classes.grow} />
                     <div className={classes.sectionDesktop}>
