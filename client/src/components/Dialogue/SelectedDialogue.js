@@ -8,6 +8,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import { makeStyles } from '@material-ui/core/styles';
 
+
 const useStyles = makeStyles((theme) => ({
     root: {
          width: 'max-content'
@@ -53,6 +54,7 @@ export default function SelectPersonDialogue({
                 className={classes.dialogue}>
                 <DialogTitle id="alert-dialog-title">{dialogueBody?.title}</DialogTitle>
                 <DialogContent>
+                   
                     <DialogContentText id="alert-dialog-description">
                         {dialogueBody?.description}
                     </DialogContentText>

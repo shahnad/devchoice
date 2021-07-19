@@ -93,8 +93,8 @@ export default function NominationList() {
         <>
             <AlertDialogue open={openDialogue} handleCloseDialogue={handleCloseDialogue} dialogueBody={
                 {
-                    title: "You can nominate 3 employees only",
-                    description: 'You can choose 3 employees at a time . are you sure to proceed ?',
+                    title: "Limit Reached !",
+                    description: 'You can nominate 3 employees at a time. are you sure to proceed?',
                     cancelLabel: 'Cancel',
                     okLabel: 'Confirm'
                 }}
@@ -123,7 +123,7 @@ export default function NominationList() {
                     </Typography>
                     <EmployeeList employees={employees} selectEmployeeList={selectEmployeeList} />
                 </Grid>
-                {employees?.selectedList?.length && <Grid item xs={4} >
+                {employees?.selectedList?.length >0&& <Grid item xs={4} >
                     <Typography variant="h5" className={classes.title}>
                         Selected
                     </Typography>
