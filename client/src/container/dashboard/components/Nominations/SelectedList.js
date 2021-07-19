@@ -10,7 +10,7 @@ import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        width: '98%',
+        width: '80%',
         margin:'auto',
         backgroundColor: theme.palette.background.paper,
         '& .MuiListItem-root': {

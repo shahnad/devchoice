@@ -38,7 +38,7 @@ export default function EmployeeList({ employees, selectEmployeeList }) {
   return (
     <Grid container spacing={3} className={classes.grid}>
       {employees.employeeList.map(emp =>
-        <Grid item xs={6}>
+        <Grid item xs={6} sm={6} md={4} lg={4}>
           <List className={classes.root} >
             <ListItem hover onClick={() => selectEmployeeList(emp)}>
               <ListItemAvatar>

@@ -67,7 +67,7 @@ export default function NominationList() {
     }
 
     const EmployeeConfirmVotes = () => {
-        
+
         const newArray = [...employees.employeeList]
         const data = newArray.filter(emp => emp.id !== selectedPerson?.person?.id)
 
@@ -81,7 +81,7 @@ export default function NominationList() {
 
     const VoteCompleted = () => {
         console.log('confirmed');
-        
+
     }
 
     const handleCloseSelectedersonDialogue = () => {
@@ -116,19 +116,19 @@ export default function NominationList() {
 
             />
 
-            <Grid container spacing={1} className={classes.root} >
-                <Grid item xs={8} direction="row" justifyContent="space-between" >
+            <Grid container spacing={0} className={classes.root} >
+                <Grid item xs={employees?.selectedList?.length ? 8 : 12} direction="row" justifyContent="space-between" >
                     <Typography variant="h5" className={classes.title}>
                         Selected for nominations
                     </Typography>
                     <EmployeeList employees={employees} selectEmployeeList={selectEmployeeList} />
                 </Grid>
-                <Grid item xs={4} >
+                {employees?.selectedList?.length && <Grid item xs={4} >
                     <Typography variant="h5" className={classes.title}>
                         Selected
                     </Typography>
                     <SelectedDetails employees={employees} removeEmployeeFromSelected={removeEmployeeFromSelected} />
-                </Grid>
+                </Grid>}
             </Grid>
         </>
     )

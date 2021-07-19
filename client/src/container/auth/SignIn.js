@@ -24,8 +24,8 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     width: theme.spacing(40),
-    [theme.breakpoints.down('sm')]: {
-      width: 'auto'
+    [theme.breakpoints.down('xs')]: {
+      width: '80%'
     },
   },
   avatar: {
